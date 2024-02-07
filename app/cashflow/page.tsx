@@ -15,13 +15,13 @@ interface Props {
 }
 const Page = async ({ searchParams: { openingId } }: Props) => {
   let openings: OpeningWithTransactions[] = await fetch(
-    "http://localhost:3000/api/cashflow/opening/",
+    "/api/cashflow/opening/",
     { cache: "no-store" }
   ).then((response) => response.json());
 
   const handleDelete = async (oId: number) => {
     console.log(
-      await fetch(`http://localhost:3000/api/cashflow/opening/${oId}/`, {
+      await fetch(`/api/cashflow/opening/${oId}/`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
