@@ -107,21 +107,21 @@ const Page = async ({ searchParams: { openingId } }: Props) => {
                 href="cashflow/opening/add/"
                 tip="Add Opening"
               >
-                <IoIosAdd size={25} />
+                <IoIosAdd className="text-lg" />
               </ActionButton>
               <ActionButton
                 color="warning"
                 href="cashflow/transaction/edit/1"
                 tip="Edit Opening"
               >
-                <MdOutlineEditCalendar size={18} />
+                <MdOutlineEditCalendar className="text-lg" />
               </ActionButton>
               <ActionButton
                 color="danger"
                 tip="Delete Opening"
                 onClick={() => handleDelete(currentOpening.id)}
               >
-                <FaRegTrashAlt size={18} />
+                <FaRegTrashAlt className="text-lg" />
               </ActionButton>
             </div>
           </CardBody>
@@ -136,7 +136,7 @@ const Page = async ({ searchParams: { openingId } }: Props) => {
               href={`cashflow/transaction/add?openingId=${currentOpening.id}`}
               tip="Add Transaction"
             >
-              <IoIosAdd size={25} />
+              <IoIosAdd className="text-lg" />
             </ActionButton>
           )}
         </div>

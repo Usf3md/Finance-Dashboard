@@ -80,7 +80,7 @@ const TransactionsTable = ({ transactions }: Props) => {
                   isIconOnly
                   className={`bg-danger rounded-md`}
                 >
-                  <FaRegTrashAlt size={14} />
+                  <FaRegTrashAlt className="text-md" />
                 </Button>
               </Tooltip>
             </TableCell>
