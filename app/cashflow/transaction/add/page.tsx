@@ -38,6 +38,7 @@ const detials = [
 ];
 const Page = ({ searchParams: { openingId } }: Props) => {
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const {
     register,
@@ -50,6 +51,7 @@ const Page = ({ searchParams: { openingId } }: Props) => {
     setValue("openingId", Number(openingId));
   }, []);
   const onSubmit = (data: FieldValues) => {
+    setIsSubmitting(true);
     if (isValid) {
       fetch("/api/cashflow/transaction/", {
         method: "POST",
@@ -68,6 +70,7 @@ const Page = ({ searchParams: { openingId } }: Props) => {
         })
         .catch((err) => {
           setError(err.message);
+          setIsSubmitting(false);
         });
     }
   };
@@ -168,7 +171,7 @@ const Page = ({ searchParams: { openingId } }: Props) => {
             type="submit"
             className="rouded-md"
             color="primary"
-            onClick={() => console.log()}
+            isDisabled={isSubmitting}
           >
             Add
           </Button>

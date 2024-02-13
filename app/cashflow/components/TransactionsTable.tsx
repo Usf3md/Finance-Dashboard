@@ -18,19 +18,18 @@ interface Props {
 
 const TransactionsTable = ({ transactions }: Props) => {
   const handleDelete = async (transactionId: number) => {
-    console.log(
-      await fetch(`/api/cashflow/transaction/${transactionId}/`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((_) => {
-          location.reload();
-        })
-    );
+    await fetch(`/api/cashflow/transaction/${transactionId}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((_) => {
+        location.reload();
+      });
   };
+
   return (
     <Table aria-label="Example static collection table" radius="sm">
       <TableHeader>

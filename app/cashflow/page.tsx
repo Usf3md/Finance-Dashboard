@@ -15,18 +15,16 @@ interface Props {
 }
 const Page = async ({ searchParams: { openingId } }: Props) => {
   const handleDelete = async (oId: number) => {
-    console.log(
-      await fetch(`/api/cashflow/opening/${oId}/`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((_) => {
-          location.reload();
-        })
-    );
+    await fetch(`/api/cashflow/opening/${oId}/`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((_) => {
+        location.reload();
+      });
   };
 
   let openings: OpeningWithTransactions[] = await fetch(

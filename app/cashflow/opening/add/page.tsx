@@ -16,7 +16,9 @@ const Page = () => {
     formState: { errors, isValid },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = (data: FieldValues) => {
+    setIsSubmitting(true);
     if (isValid) {
       fetch("/api/cashflow/opening/", {
         method: "POST",
@@ -35,6 +37,7 @@ const Page = () => {
         })
         .catch((err) => {
           setError(err.message);
+          setIsSubmitting(false);
         });
     }
   };
@@ -60,7 +63,12 @@ const Page = () => {
           />
         </div>
         <div className="flex justify-end">
-          <Button type="submit" className="rouded-md" color="primary">
+          <Button
+            type="submit"
+            className="rouded-md"
+            color="primary"
+            isDisabled={isSubmitting}
+          >
             Add
           </Button>
         </div>
