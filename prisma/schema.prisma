@@ -11,16 +11,17 @@ datasource db {
 }
 
 model Transaction {
-  id          Int      @id @default(autoincrement())
-  Opening     Opening  @relation(fields: [openingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  openingId   Int
-  name        String
-  email       String
-  amount      Int
-  type        Boolean
-  description String
-  date        DateTime @default(now())
-  image       String
+  id        Int      @id @default(autoincrement())
+  Opening   Opening  @relation(fields: [openingId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  openingId Int
+  name      String
+  email     String
+  amount    Int
+  type      Boolean
+  detail    String
+  note      String
+  date      DateTime @default(now())
+  image     String
 }
 
 model Opening {

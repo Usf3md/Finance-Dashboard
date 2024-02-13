@@ -30,7 +30,8 @@ export async function POST(request: NextRequest) {
       email: body.email,
       amount: body.amount,
       type: body.type,
-      description: body.description,
+      detail: body.detail,
+      note: body.note,
       image: body.image,
     },
   });

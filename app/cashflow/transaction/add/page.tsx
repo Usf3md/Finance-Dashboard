@@ -1,5 +1,14 @@
 "use client";
-import { Button, Input, Radio, RadioGroup, Textarea } from "@nextui-org/react";
+import {
+  Button,
+  Chip,
+  Input,
+  Radio,
+  RadioGroup,
+  Select,
+  SelectItem,
+  Textarea,
+} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import schema from "@/app/api/cashflow/transaction/schema";
@@ -13,6 +22,20 @@ interface Props {
   searchParams: { openingId: string };
 }
 
+const runners = ["Ahmed Sayed", "Abdelrahman", "Yara", "Fatma", "Attia", "Ali"];
+const detials = [
+  "DIRECT MATERIAL PAYMENT",
+  "INDIRECT MATERIAL PAYMENT",
+  "OFFICE RENT PAYMENT",
+  "KITCHEN RENT  PAYMENT",
+  "Utility PAYMENT",
+  "Salaries & wages PAYMENT",
+  "Other expenses PAYMENT",
+  "B2C REVENUE (SYSTEM ORDERS) - CASH IN",
+  "B2B REVENUE- CASH IN",
+  "SHORTENING RESALE- CASHIN",
+  "OTHER CASH IN",
+];
 const Page = ({ searchParams: { openingId } }: Props) => {
   const [error, setError] = useState("");
   const router = useRouter();
@@ -56,14 +79,18 @@ const Page = ({ searchParams: { openingId } }: Props) => {
         className="px-11 flex flex-col gap-8"
       >
         <div className="flex gap-8">
-          <Input
-            {...register("name")}
-            type="text"
+          <Select
             label="Runner Name"
-            placeholder="Enter runner name"
-            isInvalid={errors.name && true}
-            errorMessage={errors.name && errors.name.message?.toString()}
-          />
+            placeholder="Select runner name"
+            {...register("name")}
+            isRequired
+          >
+            {runners.map((runner) => (
+              <SelectItem key={runner} value={runner}>
+                {runner}
+              </SelectItem>
+            ))}
+          </Select>
           <Input
             {...register("email")}
             type="email"
@@ -73,31 +100,59 @@ const Page = ({ searchParams: { openingId } }: Props) => {
             errorMessage={errors.email && errors.email.message?.toString()}
           />
         </div>
+        <div className="flex gap-8">
+          <Input
+            {...register("amount")}
+            type="number"
+            label="Tranasaction Amount"
+            placeholder="Enter transaction amount"
+            isInvalid={errors.amount && true}
+            errorMessage={errors.amount && errors.amount.message?.toString()}
+          />
+          <Select
+            label="Transaction Details"
+            placeholder="Select Detail"
+            {...register("detail")}
+            isRequired
+          >
+            {detials.map((detail) => (
+              <SelectItem key={detail} value={detail}>
+                {detail}
+              </SelectItem>
+            ))}
+          </Select>
+        </div>
         <Input
-          {...register("amount")}
-          type="number"
-          label="Tranasaction Amount"
-          placeholder="Enter transaction amount"
-          isInvalid={errors.amount && true}
-          errorMessage={errors.amount && errors.amount.message?.toString()}
+          {...register("date")}
+          type="date"
+          label="Transaction Date"
+          placeholder="Enter Transaction date"
+          isInvalid={errors.date && true}
+          errorMessage={errors.date && errors.date.message?.toString()}
         />
         <Textarea
-          {...register("description")}
+          {...register("note")}
           type="textarea"
-          label="Transaction Description"
-          placeholder="Enter transaction description"
-          isInvalid={errors.description && true}
-          errorMessage={
-            errors.description && errors.description.message?.toString()
-          }
+          label="Transaction Notes"
+          placeholder="Enter transaction notes"
+          isInvalid={errors.note && true}
+          errorMessage={errors.note && errors.note.message?.toString()}
         />
         <RadioGroup
           {...register("type")}
           defaultValue="cash-out"
           label="Transaction Type"
         >
-          <Radio value="cash-in">Cash in</Radio>
-          <Radio value="cash-out">Cash out</Radio>
+          <Radio value="cash-in" color="success">
+            <Chip className=" text-xs" variant="bordered" color="success">
+              CASH IN
+            </Chip>
+          </Radio>
+          <Radio value="cash-out" color="danger">
+            <Chip className=" text-xs" variant="bordered" color="danger">
+              CASH OUT
+            </Chip>
+          </Radio>
         </RadioGroup>
         <Input
           {...register("image")}
@@ -109,7 +164,12 @@ const Page = ({ searchParams: { openingId } }: Props) => {
         />
 
         <div className="flex justify-end">
-          <Button type="submit" className="rouded-md" color="primary">
+          <Button
+            type="submit"
+            className="rouded-md"
+            color="primary"
+            onClick={() => console.log()}
+          >
             Add
           </Button>
         </div>

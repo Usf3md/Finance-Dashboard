@@ -6,7 +6,8 @@ CREATE TABLE `Transaction` (
     `email` VARCHAR(191) NOT NULL,
     `amount` INTEGER NOT NULL,
     `type` BOOLEAN NOT NULL,
-    `description` VARCHAR(191) NOT NULL,
+    `detail` VARCHAR(191) NOT NULL,
+    `note` VARCHAR(191) NOT NULL,
     `date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `image` VARCHAR(191) NOT NULL,
 

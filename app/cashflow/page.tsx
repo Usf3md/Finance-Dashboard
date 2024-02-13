@@ -14,11 +14,6 @@ interface Props {
   searchParams: { openingId: string };
 }
 const Page = async ({ searchParams: { openingId } }: Props) => {
-  let openings: OpeningWithTransactions[] = await fetch(
-    "/api/cashflow/opening/",
-    { cache: "no-store" }
-  ).then((response) => response.json());
-
   const handleDelete = async (oId: number) => {
     console.log(
       await fetch(`/api/cashflow/opening/${oId}/`, {
@@ -33,6 +28,11 @@ const Page = async ({ searchParams: { openingId } }: Props) => {
         })
     );
   };
+
+  let openings: OpeningWithTransactions[] = await fetch(
+    "/api/cashflow/opening/",
+    { cache: "no-store" }
+  ).then((response) => response.json());
 
   openings.forEach((opening) => {
     opening.date = new Date(opening.date);

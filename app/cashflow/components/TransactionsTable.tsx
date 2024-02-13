@@ -19,15 +19,12 @@ interface Props {
 const TransactionsTable = ({ transactions }: Props) => {
   const handleDelete = async (transactionId: number) => {
     console.log(
-      await fetch(
-        `http://localhost:3000/api/cashflow/transaction/${transactionId}/`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      )
+      await fetch(`/api/cashflow/transaction/${transactionId}/`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then((response) => response.json())
         .then((_) => {
           location.reload();
@@ -37,9 +34,10 @@ const TransactionsTable = ({ transactions }: Props) => {
   return (
     <Table aria-label="Example static collection table" radius="sm">
       <TableHeader>
+        <TableColumn>T No.</TableColumn>
         <TableColumn>Runner Name</TableColumn>
         <TableColumn>Email</TableColumn>
-        <TableColumn>Description</TableColumn>
+        <TableColumn>Detail</TableColumn>
         <TableColumn>Amount</TableColumn>
         <TableColumn>Transaction Type</TableColumn>
         <TableColumn>Transaction Date</TableColumn>
@@ -51,9 +49,10 @@ const TransactionsTable = ({ transactions }: Props) => {
             key={transaction.id}
             className=" hover:bg-default-100 transition-background hover:duration-150"
           >
+            <TableCell>{transaction.id}</TableCell>
             <TableCell>{transaction.name}</TableCell>
             <TableCell>{transaction.email}</TableCell>
-            <TableCell>{transaction.description}</TableCell>
+            <TableCell>{transaction.detail}</TableCell>
             <TableCell>{transaction.amount.toString()}</TableCell>
             <TableCell>
               {transaction.type ? (
