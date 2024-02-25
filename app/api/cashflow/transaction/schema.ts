@@ -1,14 +1,19 @@
 import { z } from "zod";
+import RunnerSchema from "../runner/schema";
 
 const schema = z.object({
-  openingId: z.number(),
-  name: z.string().min(1),
-  email: z.string().email(),
-  date: z.coerce.date().optional(),
+  id: z.number().nullish(),
+  opening: z.number(),
+  runner: RunnerSchema.or(z.number()),
   amount: z.coerce.number().positive(),
-  type: z.coerce.boolean(),
-  detail: z.string().min(1),
-  note: z.string(),
-  image: z.string(),
+  transaction_type: z.coerce.boolean(),
+  transaction_detail: z.string().min(1).or(z.number()).nullish(),
+  transaction_status: z.string().min(1).nullish(),
+  revisor: RunnerSchema.nullish(),
+  note: z.string().nullish(),
+  date: z.coerce.date(),
+  image: z.string().nullish(),
 });
+
+export type Transaction = z.infer<typeof schema>;
 export default schema;

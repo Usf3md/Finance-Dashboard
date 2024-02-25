@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providors from "./providors";
-import NavBar from "./components/NavBar";
-import SidePanel from "./components/SidePanel";
-import { Suspense } from "react";
-import { Spinner } from "@nextui-org/react";
+import AuthenticationLayout from "./components/AuthenticationLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,25 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <Providors>
         <body className={inter.className}>
-          <div className="grid grid-cols-iconContentGrid lg:grid-cols-contentGrid grid-rows-contentGrid h-svh">
-            <SidePanel />
-            <NavBar />
-            <main className="overflow-auto p-10">
-              <Suspense
-                fallback={
-                  <div className="flex w-full h-full items-center justify-center">
-                    <Spinner
-                      size="lg"
-                      className="bg-default-100 p-1 rounded-md"
-                      color="primary"
-                    />
-                  </div>
-                }
-              >
-                {children}
-              </Suspense>
-            </main>
-          </div>
+          <AuthenticationLayout>{children}</AuthenticationLayout>
         </body>
       </Providors>
     </html>

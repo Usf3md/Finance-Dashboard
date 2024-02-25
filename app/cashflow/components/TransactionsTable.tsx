@@ -1,4 +1,5 @@
 "use client";
+import { Transaction } from "@/app/api/cashflow/transaction/schema";
 import {
   Table,
   TableHeader,
@@ -8,38 +9,27 @@ import {
   TableCell,
   Chip,
   Tooltip,
-  Button,
 } from "@nextui-org/react";
-import { Transaction } from "@prisma/client";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { FaArrowUpLong } from "react-icons/fa6";
+import { FaArrowDownLong } from "react-icons/fa6";
+import ActionButton from "./ActionButton";
 interface Props {
   transactions: Transaction[];
+  handleDelete(transactionId: number): void;
 }
 
-const TransactionsTable = ({ transactions }: Props) => {
-  const handleDelete = async (transactionId: number) => {
-    await fetch(`/api/cashflow/transaction/${transactionId}/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((_) => {
-        location.reload();
-      });
-  };
-
+const TransactionsTable = ({ transactions, handleDelete }: Props) => {
   return (
     <Table aria-label="Example static collection table" radius="sm">
       <TableHeader>
         <TableColumn>T No.</TableColumn>
-        <TableColumn>Runner Name</TableColumn>
-        <TableColumn>Email</TableColumn>
+        <TableColumn>Name</TableColumn>
         <TableColumn>Detail</TableColumn>
         <TableColumn>Amount</TableColumn>
-        <TableColumn>Transaction Type</TableColumn>
-        <TableColumn>Transaction Date</TableColumn>
+        <TableColumn>Type</TableColumn>
+        <TableColumn>Status</TableColumn>
+        <TableColumn>Date</TableColumn>
         <TableColumn>Action</TableColumn>
       </TableHeader>
       <TableBody emptyContent={"No Transactions to display."}>
@@ -48,39 +38,51 @@ const TransactionsTable = ({ transactions }: Props) => {
             key={transaction.id}
             className=" hover:bg-default-100 transition-background hover:duration-150"
           >
-            <TableCell>{transaction.id}</TableCell>
-            <TableCell>{transaction.name}</TableCell>
-            <TableCell>{transaction.email}</TableCell>
-            <TableCell>{transaction.detail}</TableCell>
+            <TableCell>#{String(transaction.id).padStart(4, "0")}</TableCell>
+
+            <TableCell>
+              {
+                // @ts-ignore
+                transaction.runner.full_name
+              }
+            </TableCell>
+
+            <TableCell>{transaction.transaction_detail}</TableCell>
             <TableCell>{transaction.amount.toString()}</TableCell>
             <TableCell>
-              {transaction.type ? (
-                <Chip className=" text-xs" variant="bordered" color="success">
-                  CASH IN
-                </Chip>
+              {transaction.transaction_type ? (
+                <FaArrowUpLong className=" text-success" />
               ) : (
-                <Chip className=" text-xs" variant="bordered" color="danger">
-                  CASH OUT
+                <FaArrowDownLong className=" text-danger" />
+              )}
+            </TableCell>
+            <TableCell>
+              {transaction.transaction_status == "a" && (
+                <Chip className=" text-xs" variant="flat" color="success">
+                  Accepted
+                </Chip>
+              )}
+              {transaction.transaction_status == "r" && (
+                <Chip className=" text-xs" variant="flat" color="danger">
+                  Rejected
+                </Chip>
+              )}
+              {transaction.transaction_status == "p" && (
+                <Chip className=" text-xs" variant="flat" color="warning">
+                  Pending
                 </Chip>
               )}
             </TableCell>
             <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
             <TableCell>
-              <Tooltip
-                color={"danger"}
-                content={"Delete Transaction"}
-                className="capitalize"
+              <ActionButton
+                color="danger"
+                tip="Delete Transaction"
                 size="sm"
+                onClick={() => handleDelete(transaction.id!)}
               >
-                <Button
-                  size="sm"
-                  onClick={() => handleDelete(transaction.id)}
-                  isIconOnly
-                  className={`bg-danger rounded-md`}
-                >
-                  <FaRegTrashAlt className="text-md" />
-                </Button>
-              </Tooltip>
+                <FaRegTrashAlt className="text-small" />
+              </ActionButton>
             </TableCell>
           </TableRow>
         ))}

@@ -8,7 +8,7 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import { Opening } from "@prisma/client";
+import { Opening } from "@/app/api/cashflow/opening/schema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -28,10 +28,10 @@ const DateDropDown = ({ openings, selectedOpening }: Props) => {
       label="Opening"
       placeholder="Select an opening"
       onChange={handleSelectionChange}
-      defaultSelectedKeys={[selectedOpening.id.toString()]}
+      defaultSelectedKeys={[selectedOpening.id!.toString()]}
     >
       {openings.map((opening) => (
-        <SelectItem key={opening.id} value={opening.id}>
+        <SelectItem key={opening.id!} value={opening.id}>
           {opening.date.toLocaleDateString()}
         </SelectItem>
       ))}

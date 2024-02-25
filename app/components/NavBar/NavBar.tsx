@@ -11,7 +11,7 @@ const NavBar = () => (
       <div>
         <ThemeSwitcher />
       </div>
-      <AccountButton name="Youssef Emad" email="abc@gmail.com" />
+      <AccountButton />
     </div>
   </nav>
 );

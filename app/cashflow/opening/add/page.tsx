@@ -2,11 +2,10 @@
 import { Button, Input } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import schema from "@/app/api/cashflow/opening/schema";
-import { z } from "zod";
+import schema, { Opening } from "@/app/api/cashflow/opening/schema";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-type FormData = z.infer<typeof schema>;
+
 const Page = () => {
   const [error, setError] = useState("");
   const router = useRouter();
@@ -14,7 +13,7 @@ const Page = () => {
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormData>({ resolver: zodResolver(schema) });
+  } = useForm<Opening>({ resolver: zodResolver(schema) });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = (data: FieldValues) => {
@@ -27,11 +26,7 @@ const Page = () => {
         },
         body: JSON.stringify(data), // Convert your data to JSON format
       })
-        .then((response) => {
-          if (response.status == 409)
-            throw Error("Opening With Same Date Already Exists");
-          return response.json();
-        })
+        .then((response) => response.json())
         .then((data) => {
           router.push(`/cashflow?openingId=${data.id}`);
         })

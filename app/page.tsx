@@ -1,5 +1,6 @@
+import { OpeningService } from "@/services/clients";
 import Image from "next/image";
-
-export default function Home() {
+import DataFetch from "./components/LoginForm";
+export default async function Home() {
   return <main>Hello</main>;
 }

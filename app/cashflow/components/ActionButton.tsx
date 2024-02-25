@@ -16,15 +16,16 @@ interface Props {
   href?: string;
   onClick?(): void;
   tip: string;
-  className?: string;
+  size?: "sm" | "md" | "lg" | undefined;
 }
 
-const ActionButton = ({ children, color, href, tip, onClick }: Props) => {
+const ActionButton = ({ children, color, href, tip, onClick, size }: Props) => {
   return (
     <>
       <Tooltip color={color} content={tip} className="capitalize" size="sm">
         {href ? (
           <Button
+            size={size}
             isIconOnly
             as={Link}
             href={href}
@@ -34,6 +35,7 @@ const ActionButton = ({ children, color, href, tip, onClick }: Props) => {
           </Button>
         ) : (
           <Button
+            size={size}
             onClick={onClick}
             isIconOnly
             className={`bg-${color} rounded-md`}
