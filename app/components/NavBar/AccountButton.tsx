@@ -28,24 +28,28 @@ const AccountButton = () => {
         />
       </DropdownTrigger>
       <DropdownMenu aria-label="User Actions" variant="flat">
-        <DropdownItem key="profile" className="h-14 gap-2">
+        <DropdownItem key="profile" className=" gap-2 py-2">
           <p className="font-bold">Signed in as</p>
-          <p className="font-bold">{runner?.email}</p>
+          <p>{runner?.email}</p>
         </DropdownItem>
-        <DropdownItem key="profile" className="h-14 gap-2">
+        <DropdownItem key="profile" className=" gap-2 py-2">
           <p className="font-bold">
-            Role: {runner?.role == "m" ? "Maker" : "Checker"}
+            Role:{" "}
+            <span className="font-normal">
+              {runner?.role == "m" ? "Maker" : "Checker"}
+            </span>
           </p>
         </DropdownItem>
         <DropdownItem
           key="logout"
           color="danger"
+          className="py-2"
           onClick={() => {
             Authenticator.logout().then(() => location.reload());
             setRunner({} as Runner);
           }}
         >
-          Log Out
+          <p className="text-danger">Log out</p>
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>

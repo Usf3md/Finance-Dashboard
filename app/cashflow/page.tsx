@@ -15,6 +15,7 @@ import FullPageSpinner from "../components/FullPageSpinner";
 import RunnerContext from "../contexts/RunnerContext";
 import { RUNNER_ROLES } from "../api/cashflow/runner/schema";
 import ActionButton from "../components/ActionButton";
+import StatusChip from "./components/StatusChip";
 
 interface Props {
   searchParams: { openingId: string };
@@ -24,14 +25,53 @@ const Page = ({ searchParams: { openingId } }: Props) => {
   const [openings, setOpenings] = useState<Opening[]>([]);
   const [isOpeningLoading, setIsOpeningLoading] = useState(true);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isTransactionLoading, setIsTransactionLoading] = useState(true);
   const { runner, setRunner } = useContext(RunnerContext);
+  const [statusFilters, setStatusFilters] = useState(["a", "p"]);
 
   const handleOpeningDelete = (openingId: number) => {
     const fullOpenings = openings;
-    setOpenings(openings.filter((opening) => opening.id != openingId));
-    setCurrentOpening(undefined);
+    const newOpenings = openings.filter((opening) => opening.id != openingId);
+    setOpenings(newOpenings);
     OpeningService.delete(openingId).then((res) => {
       if (!res.success) setOpenings(fullOpenings);
+    });
+  };
+  const toggleTransactionFilter = (status: string) => {
+    let filters = [...statusFilters];
+    if (filters.includes(status))
+      filters = filters.filter((filter) => filter !== status);
+    else filters = [...filters, status];
+    setStatusFilters(filters);
+  };
+  const handleTransactionStatusChange = (
+    transactionId: number,
+    status: string,
+    endpoint: string
+  ) => {
+    const currentTransaction = transactions.find(
+      (transaction) => transaction.id === transactionId
+    );
+    if (!currentTransaction) return;
+    const oldStatus = currentTransaction.transaction_status;
+    setTransactions((prevTransactions) =>
+      structuredClone(prevTransactions).map((transaction) =>
+        transaction.id === transactionId
+          ? { ...transaction, transaction_status: status }
+          : transaction
+      )
+    );
+    fetch(`/api/cashflow/transaction/${currentTransaction.id}/${endpoint}`, {
+      method: "PATCH",
+    }).then((res) => {
+      if (!res.ok)
+        setTransactions((prevTransactions) =>
+          structuredClone(prevTransactions).map((transaction) =>
+            transaction.id === transactionId
+              ? { ...transaction, transaction_status: oldStatus }
+              : transaction
+          )
+        );
     });
   };
   const handleTransactionsDelete = (transactionId: number) => {
@@ -59,15 +99,17 @@ const Page = ({ searchParams: { openingId } }: Props) => {
   }, []);
 
   useEffect(() => {
-    if (currentOpening)
-      TransactionService.getAll(true, `?openingId=${currentOpening.id}`).then(
-        (res) => {
+    if (currentOpening) {
+      setIsTransactionLoading(true);
+      TransactionService.getAll(true, `?openingId=${currentOpening.id}`)
+        .then((res) => {
           if (res.success) {
             let rawTransactions = res.data;
             setTransactions(rawTransactions);
           }
-        }
-      );
+        })
+        .finally(() => setIsTransactionLoading(false));
+    } else setIsTransactionLoading(false);
   }, [currentOpening]);
   let opening = openings[openings.length - 1];
   if (openingId) {
@@ -76,14 +118,23 @@ const Page = ({ searchParams: { openingId } }: Props) => {
     );
     if (match) opening = match;
   }
-  if (opening && !currentOpening) setCurrentOpening(opening);
+  if ((opening && !currentOpening) || opening?.id !== currentOpening?.id) {
+    setCurrentOpening(opening);
+    setTransactions([]);
+  }
   let balance = currentOpening?.balance;
   if (balance === undefined) balance = 0;
 
   let total_loss = 0;
   let total_gain = 0;
-  for (const transaction of transactions) {
-    transaction.date = new Date(transaction.date);
+  transactions.forEach(
+    (transaction) => (transaction.date = new Date(transaction.date))
+  );
+
+  const filteredTransactions = transactions.filter((transaction) =>
+    statusFilters.includes(transaction.transaction_status!)
+  );
+  for (const transaction of filteredTransactions) {
     if (transaction.transaction_type) total_gain += transaction.amount;
     else total_loss += transaction.amount;
   }
@@ -134,7 +185,7 @@ const Page = ({ searchParams: { openingId } }: Props) => {
                     selectedOpening={currentOpening!}
                   />
                 )}
-                {runner.role == RUNNER_ROLES.MAKER && (
+                {runner?.role == RUNNER_ROLES.MAKER && (
                   <div className="flex flex-row gap-2">
                     <ActionButton
                       color="primary"
@@ -168,24 +219,66 @@ const Page = ({ searchParams: { openingId } }: Props) => {
               </CardBody>
             </Card>
           </article>
-          <article className="flex flex-col gap-4">
-            <div className=" flex justify-between items-end">
-              <label className=" font-bold text-2xl">Transactions</label>
-              {currentOpening?.id && (
-                <ActionButton
-                  color="primary"
-                  href={`/cashflow/transaction/add?openingId=${currentOpening.id}`}
-                  tip="Add Transaction"
-                >
-                  <IoIosAdd className="text-lg" />
-                </ActionButton>
-              )}
-            </div>
-            <TransactionsTable
-              transactions={transactions}
-              handleDelete={handleTransactionsDelete}
-            />
-          </article>
+          {isTransactionLoading ? (
+            <FullPageSpinner />
+          ) : (
+            <article className="flex flex-col gap-4">
+              <div className=" flex justify-between items-end">
+                <label className=" font-bold text-2xl">Transactions</label>
+                <div className="flex gap-8 justify-between items-end">
+                  <div className="flex gap-2">
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => toggleTransactionFilter("a")}
+                    >
+                      <StatusChip
+                        variant={statusFilters.includes("a") ? "flat" : "faded"}
+                        color="success"
+                      >
+                        Accepted
+                      </StatusChip>
+                    </div>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => toggleTransactionFilter("r")}
+                    >
+                      <StatusChip
+                        variant={statusFilters.includes("r") ? "flat" : "faded"}
+                        color="danger"
+                      >
+                        Rejected
+                      </StatusChip>
+                    </div>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => toggleTransactionFilter("p")}
+                    >
+                      <StatusChip
+                        variant={statusFilters.includes("p") ? "flat" : "faded"}
+                        color="warning"
+                      >
+                        Pending
+                      </StatusChip>
+                    </div>
+                  </div>
+                  {currentOpening?.id && (
+                    <ActionButton
+                      color="primary"
+                      href={`/cashflow/transaction/add?openingId=${currentOpening.id}`}
+                      tip="Add Transaction"
+                    >
+                      <IoIosAdd className="text-lg" />
+                    </ActionButton>
+                  )}
+                </div>
+              </div>
+              <TransactionsTable
+                transactions={filteredTransactions}
+                handleDelete={handleTransactionsDelete}
+                handleStatusChange={handleTransactionStatusChange}
+              />
+            </article>
+          )}
         </div>
       )}
     </>

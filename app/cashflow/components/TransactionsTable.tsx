@@ -8,7 +8,6 @@ import {
   TableRow,
   TableCell,
   Chip,
-  Tooltip,
   Button,
 } from "@nextui-org/react";
 import { FaCheck, FaRegTrashAlt } from "react-icons/fa";
@@ -18,12 +17,22 @@ import ActionButton from "../../components/ActionButton";
 import { useContext } from "react";
 import RunnerContext from "@/app/contexts/RunnerContext";
 import { RUNNER_ROLES } from "@/app/api/cashflow/runner/schema";
+import StatusChip from "./StatusChip";
 interface Props {
   transactions: Transaction[];
   handleDelete(transactionId: number): void;
+  handleStatusChange(
+    transactionId: number,
+    status: string,
+    endpoint: string
+  ): void;
 }
 
-const TransactionsTable = ({ transactions, handleDelete }: Props) => {
+const TransactionsTable = ({
+  transactions,
+  handleDelete,
+  handleStatusChange,
+}: Props) => {
   const { runner, setRunner } = useContext(RunnerContext);
   return (
     <Table aria-label="Example static collection table" radius="sm">
@@ -53,7 +62,7 @@ const TransactionsTable = ({ transactions, handleDelete }: Props) => {
             </TableCell>
 
             <TableCell>{transaction.transaction_detail}</TableCell>
-            <TableCell>{transaction.amount.toString()}</TableCell>
+            <TableCell>${transaction.amount.toString()}</TableCell>
             <TableCell>
               {transaction.transaction_type ? (
                 <FaArrowUpLong className=" text-success" />
@@ -65,19 +74,19 @@ const TransactionsTable = ({ transactions, handleDelete }: Props) => {
               <div className="flex gap-2 justify-between items-center">
                 <div>
                   {transaction.transaction_status == "a" && (
-                    <Chip className=" text-xs" variant="flat" color="success">
+                    <StatusChip variant="flat" color="success">
                       Accepted
-                    </Chip>
+                    </StatusChip>
                   )}
                   {transaction.transaction_status == "r" && (
-                    <Chip className=" text-xs" variant="flat" color="danger">
+                    <StatusChip variant="flat" color="danger">
                       Rejected
-                    </Chip>
+                    </StatusChip>
                   )}
                   {transaction.transaction_status == "p" && (
-                    <Chip className=" text-xs" variant="flat" color="warning">
+                    <StatusChip variant="flat" color="warning">
                       Pending
-                    </Chip>
+                    </StatusChip>
                   )}
                 </div>
                 {runner.role === RUNNER_ROLES.MAKER &&
@@ -89,6 +98,9 @@ const TransactionsTable = ({ transactions, handleDelete }: Props) => {
                         size="sm"
                         color="success"
                         variant="flat"
+                        onClick={() =>
+                          handleStatusChange(transaction.id!, "a", "approve")
+                        }
                       >
                         <FaCheck className="text-md" />
                       </Button>
@@ -98,6 +110,9 @@ const TransactionsTable = ({ transactions, handleDelete }: Props) => {
                         size="sm"
                         color="danger"
                         variant="flat"
+                        onClick={() =>
+                          handleStatusChange(transaction.id!, "r", "reject")
+                        }
                       >
                         <FaXmark className="text-md" />
                       </Button>
