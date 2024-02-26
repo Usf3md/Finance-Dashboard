@@ -7,7 +7,7 @@ const schema = z.object({
   runner: RunnerSchema.or(z.number()),
   amount: z.coerce.number().positive(),
   transaction_type: z.coerce.boolean(),
-  transaction_detail: z.string().min(1).or(z.number()).nullish(),
+  transaction_detail: z.string().min(1).or(z.coerce.number()).nullish(),
   transaction_status: z.string().min(1).nullish(),
   revisor: RunnerSchema.nullish(),
   note: z.string().nullish(),

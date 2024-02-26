@@ -9,17 +9,22 @@ import {
   TableCell,
   Chip,
   Tooltip,
+  Button,
 } from "@nextui-org/react";
-import { FaRegTrashAlt } from "react-icons/fa";
-import { FaArrowUpLong } from "react-icons/fa6";
+import { FaCheck, FaRegTrashAlt } from "react-icons/fa";
+import { FaArrowUpLong, FaXmark } from "react-icons/fa6";
 import { FaArrowDownLong } from "react-icons/fa6";
-import ActionButton from "./ActionButton";
+import ActionButton from "../../components/ActionButton";
+import { useContext } from "react";
+import RunnerContext from "@/app/contexts/RunnerContext";
+import { RUNNER_ROLES } from "@/app/api/cashflow/runner/schema";
 interface Props {
   transactions: Transaction[];
   handleDelete(transactionId: number): void;
 }
 
 const TransactionsTable = ({ transactions, handleDelete }: Props) => {
+  const { runner, setRunner } = useContext(RunnerContext);
   return (
     <Table aria-label="Example static collection table" radius="sm">
       <TableHeader>
@@ -57,21 +62,48 @@ const TransactionsTable = ({ transactions, handleDelete }: Props) => {
               )}
             </TableCell>
             <TableCell>
-              {transaction.transaction_status == "a" && (
-                <Chip className=" text-xs" variant="flat" color="success">
-                  Accepted
-                </Chip>
-              )}
-              {transaction.transaction_status == "r" && (
-                <Chip className=" text-xs" variant="flat" color="danger">
-                  Rejected
-                </Chip>
-              )}
-              {transaction.transaction_status == "p" && (
-                <Chip className=" text-xs" variant="flat" color="warning">
-                  Pending
-                </Chip>
-              )}
+              <div className="flex gap-2 justify-between items-center">
+                <div>
+                  {transaction.transaction_status == "a" && (
+                    <Chip className=" text-xs" variant="flat" color="success">
+                      Accepted
+                    </Chip>
+                  )}
+                  {transaction.transaction_status == "r" && (
+                    <Chip className=" text-xs" variant="flat" color="danger">
+                      Rejected
+                    </Chip>
+                  )}
+                  {transaction.transaction_status == "p" && (
+                    <Chip className=" text-xs" variant="flat" color="warning">
+                      Pending
+                    </Chip>
+                  )}
+                </div>
+                {runner.role === RUNNER_ROLES.MAKER &&
+                  transaction.transaction_status == "p" && (
+                    <div className="flex gap-2">
+                      <Button
+                        isIconOnly
+                        className="rounded-md"
+                        size="sm"
+                        color="success"
+                        variant="flat"
+                      >
+                        <FaCheck className="text-md" />
+                      </Button>
+                      <Button
+                        isIconOnly
+                        className="rounded-md"
+                        size="sm"
+                        color="danger"
+                        variant="flat"
+                      >
+                        <FaXmark className="text-md" />
+                      </Button>
+                    </div>
+                  )}
+              </div>
             </TableCell>
             <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
             <TableCell>

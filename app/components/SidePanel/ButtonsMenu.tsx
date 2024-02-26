@@ -3,48 +3,64 @@ import Link from "next/link";
 import { Button } from "@nextui-org/react";
 import { BsCashCoin } from "react-icons/bs";
 import { ImHome } from "react-icons/im";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdSupervisorAccount } from "react-icons/md";
+import RunnerContext from "@/app/contexts/RunnerContext";
+import { useContext } from "react";
+import { RUNNER_ROLES } from "@/app/api/cashflow/runner/schema";
 
 const ButtonsMenu = () => {
+  const { runner, setRunner } = useContext(RunnerContext);
   const tools = [
     {
       label: "Home",
       link: "/",
       icon: <ImHome />,
+      is_maker: false,
     },
     {
       label: "Dashboard",
       link: "/",
       icon: <MdDashboard />,
+      is_maker: false,
     },
     {
       label: "Cash Flow",
       link: "/cashflow/",
       icon: <BsCashCoin />,
+      is_maker: false,
+    },
+    {
+      label: "Accounts",
+      link: "/accounts/",
+      icon: <MdSupervisorAccount />,
+      is_maker: true,
     },
   ];
   return (
     <div className="flex flex-col gap-2">
-      {tools.map((tool) => (
-        <>
-          <Button
-            className="hidden bg-transparent rounded-md lg:flex justify-start gap-3 text-md items-center bg-default-100 border-solid border-1 border-default-200"
-            as={Link}
-            href={tool.link}
-          >
-            {tool.icon}
-            {tool.label}
-          </Button>
-          <Button
-            className="lg:hidden bg-transparent rounded-md flex justify-center gap-3 text-md items-center bg-default-100 border-solid border-1 border-default-200"
-            as={Link}
-            href={tool.link}
-            isIconOnly
-          >
-            {tool.icon}
-          </Button>
-        </>
-      ))}
+      {tools.map((tool) => {
+        if (tool.is_maker && runner?.role !== RUNNER_ROLES.MAKER) return;
+        return (
+          <>
+            <Button
+              className="hidden bg-content2 rounded-md lg:flex justify-start gap-3 text-md items-center shadow-sm"
+              as={Link}
+              href={tool.link}
+            >
+              {tool.icon}
+              {tool.label}
+            </Button>
+            <Button
+              className="lg:hidden bg-content2 rounded-md flex justify-center gap-3 text-md items-center shadow-sm"
+              as={Link}
+              href={tool.link}
+              isIconOnly
+            >
+              {tool.icon}
+            </Button>
+          </>
+        );
+      })}
     </div>
   );
 };

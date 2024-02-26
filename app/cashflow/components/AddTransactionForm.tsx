@@ -32,7 +32,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { errors, isValid, dirtyFields },
+    formState: { errors, isValid },
   } = useForm<Transaction>({ resolver: zodResolver(schema) });
 
   useEffect(() => {

@@ -14,7 +14,7 @@ import { Opening } from "../api/cashflow/opening/schema";
 import FullPageSpinner from "../components/FullPageSpinner";
 import RunnerContext from "../contexts/RunnerContext";
 import { RUNNER_ROLES } from "../api/cashflow/runner/schema";
-import ActionButton from "./components/ActionButton";
+import ActionButton from "../components/ActionButton";
 
 interface Props {
   searchParams: { openingId: string };
