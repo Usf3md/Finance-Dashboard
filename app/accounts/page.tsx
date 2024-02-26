@@ -7,7 +7,7 @@ import ActionButton from "../components/ActionButton";
 import { IoIosAdd } from "react-icons/io";
 import FullPageSpinner from "../components/FullPageSpinner";
 
-const page = () => {
+const Page = () => {
   const [runners, setRunners] = useState<Runner[]>([]);
   const [isRunnersLoading, setIsRunnersLoading] = useState(true);
   useEffect(() => {
@@ -42,4 +42,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
