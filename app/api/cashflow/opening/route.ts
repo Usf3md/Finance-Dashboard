@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
       Authorization: getAccessCookie(request),
     },
   });
-  return openings;
+  return NextResponse.json(await openings.json(), { status: openings.status });
 }
 export async function POST(request: NextRequest) {
   const body: Opening = await request.json();
@@ -24,5 +24,5 @@ export async function POST(request: NextRequest) {
     status = response.status;
     return response.json();
   });
-  return NextResponse.json(opening, { status: status });
+  return NextResponse.json(await opening.json(), { status: status });
 }

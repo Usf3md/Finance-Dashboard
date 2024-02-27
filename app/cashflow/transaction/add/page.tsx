@@ -14,7 +14,9 @@ const Page = ({ searchParams: { openingId } }: Props) => {
   const { runner, setRunner } = useContext(RunnerContext);
   const [details, setDetails] = useState<TransactionDetail[]>([]);
   useEffect(() => {
-    TransactionDetailService.getAll(true).then((res) => setDetails(res.data));
+    TransactionDetailService.getAll(true).then((res) => {
+      setDetails(res.data);
+    });
   }, []);
 
   return (

@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
       },
     }
   );
-  return transactions;
+  return NextResponse.json(await transactions.json(), {
+    status: transactions.status,
+  });
 }
 
 export async function POST(request: NextRequest) {
@@ -28,5 +30,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     }
   );
-  return transaction;
+  return NextResponse.json(await transaction.json(), {
+    status: transaction.status,
+  });
 }

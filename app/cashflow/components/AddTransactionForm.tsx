@@ -39,7 +39,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
     register("opening");
     setValue("opening", Number(openingId));
     register("runner");
-    setValue("runner", currentRunner.id!);
+    setValue("runner", currentRunner?.id!);
   }, [currentRunner]);
 
   const onSubmit = (data: FieldValues) => {
@@ -89,7 +89,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
           isRequired
         >
           {details.map((detail) => (
-            <SelectItem key={detail.id!} value={detail.id}>
+            <SelectItem key={detail.id!} value={detail.id!}>
               {detail.detail}
             </SelectItem>
           ))}
@@ -142,7 +142,6 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
           className="rouded-md"
           color="primary"
           isDisabled={isSubmitting}
-          onClick={() => console.log(getValues())}
         >
           Add
         </Button>

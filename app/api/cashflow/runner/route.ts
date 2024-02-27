@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
       Authorization: getAccessCookie(request),
     },
   });
-  return runners;
+  return NextResponse.json(await runners.json(), { status: runners.status });
 }
 // export async function POST(request: NextRequest) {
 //   const body: Opening = await request.json();

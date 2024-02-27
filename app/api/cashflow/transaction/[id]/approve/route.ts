@@ -1,11 +1,11 @@
 import { getAccessCookie } from "@/app/api/services/cookies-managment";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const response = await fetch(
+  const transaction = await fetch(
     `${process.env.BACKEND_URL}/cashflow/transactions/${params.id}/approve/`,
     {
       method: "PATCH",
@@ -14,5 +14,7 @@ export async function PATCH(
       },
     }
   );
-  return response;
+  return NextResponse.json(await transaction.json(), {
+    status: transaction.status,
+  });
 }

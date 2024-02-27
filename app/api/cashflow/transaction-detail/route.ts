@@ -10,5 +10,5 @@ export async function GET(request: NextRequest) {
       },
     }
   );
-  return details;
+  return NextResponse.json(await details.json(), { status: details.status });
 }
