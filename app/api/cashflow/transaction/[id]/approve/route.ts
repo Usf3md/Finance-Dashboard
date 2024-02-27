@@ -14,7 +14,7 @@ export async function PATCH(
       },
     }
   );
-  return NextResponse.json(await transaction.json(), {
+  return NextResponse.json({
     status: transaction.status,
   });
 }

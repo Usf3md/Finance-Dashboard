@@ -27,7 +27,7 @@ const Page = ({ searchParams: { openingId } }: Props) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isTransactionLoading, setIsTransactionLoading] = useState(true);
   const { runner, setRunner } = useContext(RunnerContext);
-  const [statusFilters, setStatusFilters] = useState(["a", "p"]);
+  const [statusFilters, setStatusFilters] = useState(["a", "r", "p"]);
 
   const handleOpeningDelete = (openingId: number) => {
     const fullOpenings = openings;
