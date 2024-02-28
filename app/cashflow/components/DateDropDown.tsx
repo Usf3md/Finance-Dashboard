@@ -29,6 +29,7 @@ const DateDropDown = ({ openings, selectedOpening }: Props) => {
       placeholder="Select an opening"
       onChange={handleSelectionChange}
       defaultSelectedKeys={[selectedOpening.id!.toString()]}
+      radius="sm"
     >
       {openings.map((opening) => (
         <SelectItem key={opening.id!} value={opening.id}>

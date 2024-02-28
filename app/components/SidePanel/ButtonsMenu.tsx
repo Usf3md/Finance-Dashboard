@@ -45,6 +45,7 @@ const ButtonsMenu = () => {
             className="bg-content2 rounded-md flex justify-start gap-3 text-md items-center shadow-sm"
             as={Link}
             href={tool.link}
+            key={tool.label}
           >
             {tool.icon}
             {tool.label}

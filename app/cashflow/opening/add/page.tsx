@@ -37,9 +37,9 @@ const Page = () => {
     }
   };
   return (
-    <article className="px-11">
+    <article>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
-        <div className="flex flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8">
           <Input
             {...register("date")}
             type="date"
@@ -47,6 +47,7 @@ const Page = () => {
             placeholder="Enter opening date"
             isInvalid={errors.date && true}
             errorMessage={errors.date && errors.date.message?.toString()}
+            radius="sm"
           />
           <Input
             {...register("balance")}
@@ -55,6 +56,7 @@ const Page = () => {
             placeholder="Enter opening balance"
             isInvalid={errors.balance && true}
             errorMessage={errors.balance && errors.balance.message?.toString()}
+            radius="sm"
           />
         </div>
         <div className="flex justify-end">
@@ -63,6 +65,7 @@ const Page = () => {
             className="rouded-md"
             color="primary"
             isDisabled={isSubmitting}
+            radius="sm"
           >
             Add
           </Button>
