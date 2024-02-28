@@ -41,24 +41,14 @@ const ButtonsMenu = () => {
       {tools.map((tool) => {
         if (tool.is_maker && runner?.role !== RUNNER_ROLES.MAKER) return;
         return (
-          <>
-            <Button
-              className="hidden bg-content2 rounded-md lg:flex justify-start gap-3 text-md items-center shadow-sm"
-              as={Link}
-              href={tool.link}
-            >
-              {tool.icon}
-              {tool.label}
-            </Button>
-            <Button
-              className="lg:hidden bg-content2 rounded-md flex justify-center gap-3 text-md items-center shadow-sm"
-              as={Link}
-              href={tool.link}
-              isIconOnly
-            >
-              {tool.icon}
-            </Button>
-          </>
+          <Button
+            className="bg-content2 rounded-md flex justify-start gap-3 text-md items-center shadow-sm"
+            as={Link}
+            href={tool.link}
+          >
+            {tool.icon}
+            {tool.label}
+          </Button>
         );
       })}
     </div>

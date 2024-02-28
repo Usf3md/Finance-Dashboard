@@ -69,11 +69,8 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
     }
   };
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="px-11 flex flex-col gap-8"
-    >
-      <div className="flex gap-8">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+      <div className="flex flex-col lg:flex-row gap-8">
         <Input
           {...register("amount")}
           type="number"
@@ -81,12 +78,14 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
           placeholder="Enter transaction amount"
           isInvalid={errors.amount && true}
           errorMessage={errors.amount && errors.amount.message?.toString()}
+          radius="sm"
         />
         <Select
           label="Transaction Details"
           placeholder="Select Detail"
           {...register("transaction_detail")}
           isRequired
+          radius="sm"
         >
           {details.map((detail) => (
             <SelectItem key={detail.id!} value={detail.id!}>
@@ -102,6 +101,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
         placeholder="Enter Transaction date"
         isInvalid={errors.date && true}
         errorMessage={errors.date && errors.date.message?.toString()}
+        radius="sm"
       />
       <Textarea
         {...register("note")}
@@ -110,6 +110,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
         placeholder="Enter transaction notes"
         isInvalid={errors.note && true}
         errorMessage={errors.note && errors.note.message?.toString()}
+        radius="sm"
       />
       <RadioGroup
         {...register("transaction_type")}
@@ -134,6 +135,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
         placeholder="Enter transaction image"
         isInvalid={errors.image && true}
         errorMessage={errors.image && errors.image.message?.toString()}
+        radius="sm"
       />
 
       <div className="flex justify-end">
@@ -142,6 +144,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
           className="rouded-md"
           color="primary"
           isDisabled={isSubmitting}
+          radius="sm"
         >
           Add
         </Button>

@@ -34,13 +34,13 @@ html {
 /* Media queries for different screen sizes */
 @media screen and (max-width: 320px) {
   html {
-    font-size: 8px;
+    font-size: 10px;
   }
 }
 
 @media screen and (min-width: 321px) and (max-width: 768px) {
   html {
-    font-size: 10px;
+    font-size: 12px;
   }
 }
 

@@ -18,7 +18,7 @@ const config: Config = {
       },
       gridTemplateColumns: {
         contentGrid: "16rem 1fr",
-        iconContentGrid: "4rem 1fr",
+        iconContentGrid: "",
       },
       gridTemplateRows: {
         contentGrid: "5rem 1fr",
