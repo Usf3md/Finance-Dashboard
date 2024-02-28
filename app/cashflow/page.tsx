@@ -140,147 +140,157 @@ const Page = ({ searchParams: { openingId } }: Props) => {
   }
   return (
     <>
-      {isOpeningLoading ? (
-        <FullPageSpinner />
-      ) : (
-        <div className=" flex flex-col gap-11">
-          <article className="grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-8">
-            <Card className=" flex-col items-start p-4 rounded-md">
-              <CardHeader className="flex-row items-end gap-2">
-                <p className=" text-xl font-bold">Starting Balance:</p>
-                <p className="">£{balance.toLocaleString("en-US")}</p>
-              </CardHeader>
-              <CardBody className="flex flex-col flex-wrap gap-4">
-                <p className="text-2xl font-bold" id="balance">
-                  £{(balance - total_loss + total_gain).toLocaleString("en-US")}
-                </p>
-                <div className="flex flex-row">
-                  <Chip
-                    startContent={<FaArrowDownLong />}
-                    variant="light"
-                    color="danger"
-                  >
-                    £{total_loss.toLocaleString("en-US")}
-                  </Chip>
-                  <Chip
-                    startContent={<FaArrowUpLong />}
-                    variant="light"
-                    color="success"
-                  >
-                    £{total_gain.toLocaleString("en-US")}
-                  </Chip>
-                </div>
-              </CardBody>
-            </Card>
-            <Card className=" p-4 rounded-md">
-              <CardHeader className="flex-col items-start">
-                <label htmlFor="opening-date" className="text-xl font-bold">
-                  Opening Date
-                </label>
-              </CardHeader>
-              <CardBody className="text-2xl font-bold flex flex-row items-end gap-4">
-                {openings.length > 0 && (
-                  <DateDropDown
-                    openings={openings}
-                    selectedOpening={currentOpening!}
-                  />
-                )}
-                {runner?.role == RUNNER_ROLES.MAKER && (
-                  <div className="flex flex-row gap-2">
-                    <ActionButton
-                      color="primary"
-                      href="/cashflow/opening/add/"
-                      tip="Add Opening"
+      {runner?.id &&
+        (isOpeningLoading ? (
+          <FullPageSpinner />
+        ) : (
+          <div className=" flex flex-col gap-11">
+            <article className="grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-8">
+              <Card className=" flex-col items-start p-4 rounded-md">
+                <CardHeader className="flex-row items-end gap-2">
+                  <p className=" text-xl font-bold">Starting Balance:</p>
+                  <p className="">£{balance.toLocaleString("en-US")}</p>
+                </CardHeader>
+                <CardBody className="flex flex-col flex-wrap gap-4">
+                  <p className="text-2xl font-bold" id="balance">
+                    £
+                    {(balance - total_loss + total_gain).toLocaleString(
+                      "en-US"
+                    )}
+                  </p>
+                  <div className="flex flex-row">
+                    <Chip
+                      startContent={<FaArrowDownLong />}
+                      variant="light"
+                      color="danger"
                     >
-                      <IoIosAdd className="text-lg" />
-                    </ActionButton>
-                    {openings.length > 0 && (
-                      <>
-                        <ActionButton
-                          color="warning"
-                          href="/cashflow/opening/edit/1"
-                          tip="Edit Opening"
-                        >
-                          <MdOutlineEditCalendar className="text-lg" />
-                        </ActionButton>
-                        <ActionButton
-                          color="danger"
-                          tip="Delete Opening"
-                          onClick={() =>
-                            handleOpeningDelete(currentOpening?.id!)
+                      £{total_loss.toLocaleString("en-US")}
+                    </Chip>
+                    <Chip
+                      startContent={<FaArrowUpLong />}
+                      variant="light"
+                      color="success"
+                    >
+                      £{total_gain.toLocaleString("en-US")}
+                    </Chip>
+                  </div>
+                </CardBody>
+              </Card>
+              <Card className=" p-4 rounded-md">
+                <CardHeader className="flex-col items-start">
+                  <label htmlFor="opening-date" className="text-xl font-bold">
+                    Opening Date
+                  </label>
+                </CardHeader>
+                <CardBody className="text-2xl font-bold flex flex-row items-end gap-4">
+                  {openings.length > 0 && (
+                    <DateDropDown
+                      openings={openings}
+                      selectedOpening={currentOpening!}
+                    />
+                  )}
+                  {runner?.role == RUNNER_ROLES.MAKER && (
+                    <div className="flex flex-row gap-2">
+                      <ActionButton
+                        color="primary"
+                        href="/cashflow/opening/add/"
+                        tip="Add Opening"
+                      >
+                        <IoIosAdd className="text-lg" />
+                      </ActionButton>
+                      {openings.length > 0 && (
+                        <>
+                          <ActionButton
+                            color="warning"
+                            href="/cashflow/opening/edit/1"
+                            tip="Edit Opening"
+                          >
+                            <MdOutlineEditCalendar className="text-lg" />
+                          </ActionButton>
+                          <ActionButton
+                            color="danger"
+                            tip="Delete Opening"
+                            onClick={() =>
+                              handleOpeningDelete(currentOpening?.id!)
+                            }
+                          >
+                            <FaRegTrashAlt className="text-lg" />
+                          </ActionButton>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </CardBody>
+              </Card>
+            </article>
+            {isTransactionLoading ? (
+              <FullPageSpinner />
+            ) : (
+              <article className="flex flex-col gap-4">
+                <div className=" flex justify-between items-end">
+                  <label className=" font-bold text-2xl">Transactions</label>
+                  <div className="flex gap-8 justify-between items-end">
+                    <div className="flex gap-2">
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => toggleTransactionFilter("a")}
+                      >
+                        <StatusChip
+                          variant={
+                            statusFilters.includes("a") ? "flat" : "faded"
                           }
+                          color="success"
                         >
-                          <FaRegTrashAlt className="text-lg" />
-                        </ActionButton>
-                      </>
+                          Accepted
+                        </StatusChip>
+                      </div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => toggleTransactionFilter("r")}
+                      >
+                        <StatusChip
+                          variant={
+                            statusFilters.includes("r") ? "flat" : "faded"
+                          }
+                          color="danger"
+                        >
+                          Rejected
+                        </StatusChip>
+                      </div>
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => toggleTransactionFilter("p")}
+                      >
+                        <StatusChip
+                          variant={
+                            statusFilters.includes("p") ? "flat" : "faded"
+                          }
+                          color="warning"
+                        >
+                          Pending
+                        </StatusChip>
+                      </div>
+                    </div>
+                    {currentOpening?.id && (
+                      <ActionButton
+                        color="primary"
+                        href={`/cashflow/transaction/add?openingId=${currentOpening.id}`}
+                        tip="Add Transaction"
+                      >
+                        <IoIosAdd className="text-lg" />
+                      </ActionButton>
                     )}
                   </div>
-                )}
-              </CardBody>
-            </Card>
-          </article>
-          {isTransactionLoading ? (
-            <FullPageSpinner />
-          ) : (
-            <article className="flex flex-col gap-4">
-              <div className=" flex justify-between items-end">
-                <label className=" font-bold text-2xl">Transactions</label>
-                <div className="flex gap-8 justify-between items-end">
-                  <div className="flex gap-2">
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => toggleTransactionFilter("a")}
-                    >
-                      <StatusChip
-                        variant={statusFilters.includes("a") ? "flat" : "faded"}
-                        color="success"
-                      >
-                        Accepted
-                      </StatusChip>
-                    </div>
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => toggleTransactionFilter("r")}
-                    >
-                      <StatusChip
-                        variant={statusFilters.includes("r") ? "flat" : "faded"}
-                        color="danger"
-                      >
-                        Rejected
-                      </StatusChip>
-                    </div>
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => toggleTransactionFilter("p")}
-                    >
-                      <StatusChip
-                        variant={statusFilters.includes("p") ? "flat" : "faded"}
-                        color="warning"
-                      >
-                        Pending
-                      </StatusChip>
-                    </div>
-                  </div>
-                  {currentOpening?.id && (
-                    <ActionButton
-                      color="primary"
-                      href={`/cashflow/transaction/add?openingId=${currentOpening.id}`}
-                      tip="Add Transaction"
-                    >
-                      <IoIosAdd className="text-lg" />
-                    </ActionButton>
-                  )}
                 </div>
-              </div>
-              <TransactionsTable
-                transactions={filteredTransactions}
-                handleDelete={handleTransactionsDelete}
-                handleStatusChange={handleTransactionStatusChange}
-              />
-            </article>
-          )}
-        </div>
-      )}
+                <TransactionsTable
+                  transactions={filteredTransactions}
+                  handleDelete={handleTransactionsDelete}
+                  handleStatusChange={handleTransactionStatusChange}
+                />
+              </article>
+            )}
+          </div>
+        ))}
     </>
   );
 };

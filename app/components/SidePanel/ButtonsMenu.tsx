@@ -15,31 +15,31 @@ const ButtonsMenu = () => {
       label: "Home",
       link: "/",
       icon: <ImHome />,
-      is_maker: false,
+      allowed: runner?.role === "m",
     },
     {
       label: "Dashboard",
       link: "/",
       icon: <MdDashboard />,
-      is_maker: false,
+      allowed: runner?.role === "m",
     },
     {
       label: "Purchasing",
       link: "/cashflow/",
       icon: <BsCashCoin />,
-      is_maker: false,
+      allowed: runner?.role,
     },
     {
       label: "Accounts",
       link: "/accounts/",
       icon: <MdSupervisorAccount />,
-      is_maker: true,
+      allowed: runner?.role === "m",
     },
   ];
   return (
     <div className="flex flex-col gap-2">
       {tools.map((tool) => {
-        if (tool.is_maker && runner?.role !== RUNNER_ROLES.MAKER) return;
+        if (!tool.allowed) return;
         return (
           <Button
             className="bg-content2 rounded-md flex justify-start gap-3 text-md items-center shadow-sm"
