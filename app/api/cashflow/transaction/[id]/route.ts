@@ -1,5 +1,5 @@
 import { getAccessCookie } from "@/app/api/services/cookies-managment";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function DELETE(
   request: NextRequest,
@@ -14,6 +14,5 @@ export async function DELETE(
       },
     }
   );
-
-  return NextResponse.json({ status: response.status });
+  return new Response(null, { status: response.status });
 }

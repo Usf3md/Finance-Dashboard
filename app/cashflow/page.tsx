@@ -7,7 +7,10 @@ import { MdOutlineEditCalendar } from "react-icons/md";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaArrowUpLong } from "react-icons/fa6";
 import { FaArrowDownLong } from "react-icons/fa6";
-import { Transaction } from "../api/cashflow/transaction/schema";
+import {
+  TRANSACTION_STATUS,
+  Transaction,
+} from "../api/cashflow/transaction/schema";
 import { OpeningService, TransactionService } from "@/services/clients";
 import { useContext, useEffect, useState } from "react";
 import { Opening } from "../api/cashflow/opening/schema";
@@ -16,6 +19,7 @@ import RunnerContext from "../contexts/RunnerContext";
 import { RUNNER_ROLES } from "../api/cashflow/runner/schema";
 import ActionButton from "../components/ActionButton";
 import StatusChip from "./components/StatusChip";
+import { titleCase } from "@/services/utils";
 
 interface Props {
   searchParams: { openingId: string };
@@ -27,7 +31,9 @@ const Page = ({ searchParams: { openingId } }: Props) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isTransactionLoading, setIsTransactionLoading] = useState(true);
   const { runner, setRunner } = useContext(RunnerContext);
-  const [statusFilters, setStatusFilters] = useState(["a", "r", "p"]);
+  const [statusFilters, setStatusFilters] = useState(
+    Object.values(TRANSACTION_STATUS)
+  );
 
   const handleOpeningDelete = (openingId: number) => {
     const fullOpenings = openings;
@@ -189,7 +195,7 @@ const Page = ({ searchParams: { openingId } }: Props) => {
                       selectedOpening={currentOpening!}
                     />
                   )}
-                  {runner?.role == RUNNER_ROLES.MAKER && (
+                  {runner?.role == RUNNER_ROLES.CHECKER && (
                     <div className="flex flex-row gap-2">
                       <ActionButton
                         color="primary"
@@ -233,41 +239,53 @@ const Page = ({ searchParams: { openingId } }: Props) => {
                     <div className="flex gap-2">
                       <div
                         className="cursor-pointer"
-                        onClick={() => toggleTransactionFilter("a")}
+                        onClick={() =>
+                          toggleTransactionFilter(TRANSACTION_STATUS.APPROVED)
+                        }
                       >
                         <StatusChip
                           variant={
-                            statusFilters.includes("a") ? "flat" : "faded"
+                            statusFilters.includes(TRANSACTION_STATUS.APPROVED)
+                              ? "flat"
+                              : "faded"
                           }
                           color="success"
                         >
-                          Accepted
+                          {titleCase(TRANSACTION_STATUS.APPROVED)}
                         </StatusChip>
                       </div>
                       <div
                         className="cursor-pointer"
-                        onClick={() => toggleTransactionFilter("r")}
+                        onClick={() =>
+                          toggleTransactionFilter(TRANSACTION_STATUS.REJECTED)
+                        }
                       >
                         <StatusChip
                           variant={
-                            statusFilters.includes("r") ? "flat" : "faded"
+                            statusFilters.includes(TRANSACTION_STATUS.REJECTED)
+                              ? "flat"
+                              : "faded"
                           }
                           color="danger"
                         >
-                          Rejected
+                          {titleCase(TRANSACTION_STATUS.REJECTED)}
                         </StatusChip>
                       </div>
                       <div
                         className="cursor-pointer"
-                        onClick={() => toggleTransactionFilter("p")}
+                        onClick={() =>
+                          toggleTransactionFilter(TRANSACTION_STATUS.PENDING)
+                        }
                       >
                         <StatusChip
                           variant={
-                            statusFilters.includes("p") ? "flat" : "faded"
+                            statusFilters.includes(TRANSACTION_STATUS.PENDING)
+                              ? "flat"
+                              : "faded"
                           }
                           color="warning"
                         >
-                          Pending
+                          {titleCase(TRANSACTION_STATUS.PENDING)}
                         </StatusChip>
                       </div>
                     </div>

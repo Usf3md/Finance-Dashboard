@@ -1,5 +1,8 @@
 "use client";
-import { Transaction } from "@/app/api/cashflow/transaction/schema";
+import {
+  TRANSACTION_STATUS,
+  Transaction,
+} from "@/app/api/cashflow/transaction/schema";
 import {
   Table,
   TableHeader,
@@ -18,6 +21,7 @@ import { useContext } from "react";
 import RunnerContext from "@/app/contexts/RunnerContext";
 import { RUNNER_ROLES } from "@/app/api/cashflow/runner/schema";
 import StatusChip from "./StatusChip";
+import TimerButton from "@/app/components/TimerButton";
 interface Props {
   transactions: Transaction[];
   handleDelete(transactionId: number): void;
@@ -73,24 +77,28 @@ const TransactionsTable = ({
             <TableCell>
               <div className="flex gap-2 justify-between items-center">
                 <div>
-                  {transaction.transaction_status == "a" && (
+                  {transaction.transaction_status ==
+                    TRANSACTION_STATUS.APPROVED && (
                     <StatusChip variant="flat" color="success">
                       Accepted
                     </StatusChip>
                   )}
-                  {transaction.transaction_status == "r" && (
+                  {transaction.transaction_status ==
+                    TRANSACTION_STATUS.REJECTED && (
                     <StatusChip variant="flat" color="danger">
                       Rejected
                     </StatusChip>
                   )}
-                  {transaction.transaction_status == "p" && (
+                  {transaction.transaction_status ==
+                    TRANSACTION_STATUS.PENDING && (
                     <StatusChip variant="flat" color="warning">
                       Pending
                     </StatusChip>
                   )}
                 </div>
-                {runner.role === RUNNER_ROLES.MAKER &&
-                  transaction.transaction_status == "p" && (
+                {runner.role === RUNNER_ROLES.CHECKER &&
+                  transaction.transaction_status ==
+                    TRANSACTION_STATUS.PENDING && (
                     <div className="flex gap-2">
                       <Button
                         isIconOnly
@@ -99,7 +107,11 @@ const TransactionsTable = ({
                         color="success"
                         variant="flat"
                         onClick={() =>
-                          handleStatusChange(transaction.id!, "a", "approve")
+                          handleStatusChange(
+                            transaction.id!,
+                            TRANSACTION_STATUS.APPROVED,
+                            "approve"
+                          )
                         }
                       >
                         <FaCheck className="text-md" />
@@ -111,7 +123,11 @@ const TransactionsTable = ({
                         color="danger"
                         variant="flat"
                         onClick={() =>
-                          handleStatusChange(transaction.id!, "r", "reject")
+                          handleStatusChange(
+                            transaction.id!,
+                            TRANSACTION_STATUS.REJECTED,
+                            "reject"
+                          )
                         }
                       >
                         <FaXmark className="text-md" />
@@ -122,14 +138,26 @@ const TransactionsTable = ({
             </TableCell>
             <TableCell>{transaction.date.toLocaleDateString()}</TableCell>
             <TableCell>
-              <ActionButton
-                color="danger"
-                tip="Delete Transaction"
-                size="sm"
-                onClick={() => handleDelete(transaction.id!)}
-              >
-                <FaRegTrashAlt className="text-small" />
-              </ActionButton>
+              {runner?.role == RUNNER_ROLES.CHECKER && (
+                <ActionButton
+                  color="danger"
+                  tip="Delete Transaction"
+                  size="sm"
+                  onClick={() => handleDelete(transaction.id!)}
+                >
+                  <FaRegTrashAlt className="text-small" />
+                </ActionButton>
+              )}
+              {runner?.role == RUNNER_ROLES.MAKER && (
+                <TimerButton
+                  color="danger"
+                  time={transaction.remaining_time!}
+                  size="sm"
+                  onClick={() => handleDelete(transaction.id!)}
+                >
+                  <FaRegTrashAlt className="text-small" />
+                </TimerButton>
+              )}
             </TableCell>
           </TableRow>
         ))}

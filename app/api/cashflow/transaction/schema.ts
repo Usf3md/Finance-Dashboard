@@ -13,7 +13,14 @@ const schema = z.object({
   note: z.string().nullish(),
   date: z.coerce.date(),
   image: z.string().nullish(),
+  remaining_time: z.number().nullish(),
 });
+
+export const TRANSACTION_STATUS = {
+  APPROVED: "approved",
+  REJECTED: "rejected",
+  PENDING: "pending",
+};
 
 export type Transaction = z.infer<typeof schema>;
 export default schema;

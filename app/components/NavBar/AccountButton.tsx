@@ -9,8 +9,9 @@ import {
 } from "@nextui-org/react";
 import React, { useContext, useEffect, useState } from "react";
 import Authenticator from "@/services/auth/auth";
-import { Runner } from "@/app/api/cashflow/runner/schema";
+import { RUNNER_ROLES, Runner } from "@/app/api/cashflow/runner/schema";
 import RunnerContext from "@/app/contexts/RunnerContext";
+import { titleCase } from "@/services/utils";
 
 const AccountButton = () => {
   const { runner, setRunner } = useContext(RunnerContext);
@@ -36,7 +37,10 @@ const AccountButton = () => {
           <p className="font-bold">
             Role:{" "}
             <span className="font-normal">
-              {runner?.role == "m" ? "Maker" : "Checker"}
+              {runner?.role == RUNNER_ROLES.MAKER &&
+                titleCase(RUNNER_ROLES.MAKER)}
+              {runner?.role == RUNNER_ROLES.CHECKER &&
+                titleCase(RUNNER_ROLES.CHECKER)}
             </span>
           </p>
         </DropdownItem>

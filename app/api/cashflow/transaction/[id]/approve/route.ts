@@ -1,5 +1,5 @@
 import { getAccessCookie } from "@/app/api/services/cookies-managment";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function PATCH(
   request: NextRequest,
@@ -14,7 +14,5 @@ export async function PATCH(
       },
     }
   );
-  return NextResponse.json({
-    status: transaction.status,
-  });
+  return new Response(null, { status: transaction.status });
 }

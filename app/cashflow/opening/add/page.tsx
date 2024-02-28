@@ -5,7 +5,7 @@ import { useState } from "react";
 import schema, { Opening } from "@/app/api/cashflow/opening/schema";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { getTodaysDate } from "@/services/date";
+import { getTodaysDate } from "@/services/utils";
 
 const Page = () => {
   const [error, setError] = useState("");

@@ -33,12 +33,12 @@ const RunnersTable = ({ runners }: Props) => {
             <TableCell>{runner.full_name}</TableCell>
             <TableCell>{runner.email}</TableCell>
             <TableCell>
-              {runner.role == RUNNER_ROLES.MAKER && (
+              {runner.role == RUNNER_ROLES.CHECKER && (
                 <Chip className=" text-xs" variant="flat" color="secondary">
                   Maker
                 </Chip>
               )}
-              {runner.role == RUNNER_ROLES.CHECKER && (
+              {runner.role == RUNNER_ROLES.MAKER && (
                 <Chip className=" text-xs" variant="flat" color="primary">
                   Checker
                 </Chip>

@@ -15,5 +15,5 @@ export async function DELETE(
     }
   );
 
-  return NextResponse.json({ status: response.status });
+  return new Response(null, { status: response.status });
 }

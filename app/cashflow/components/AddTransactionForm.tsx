@@ -15,7 +15,7 @@ import schema, { Transaction } from "@/app/api/cashflow/transaction/schema";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TransactionDetail } from "@/app/api/cashflow/transaction-detail/schema";
-import { getTodaysDate } from "@/services/date";
+import { getTodaysDate } from "@/services/utils";
 import { TransactionDetailService } from "@/services/clients";
 import RunnerContext from "@/app/contexts/RunnerContext";
 

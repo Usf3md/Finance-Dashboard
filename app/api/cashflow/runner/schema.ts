@@ -13,6 +13,6 @@ export type Runner = z.infer<typeof schema>;
 export default schema;
 
 export const RUNNER_ROLES = {
-  MAKER: "m",
-  CHECKER: "c",
+  MAKER: "maker",
+  CHECKER: "checker",
 };

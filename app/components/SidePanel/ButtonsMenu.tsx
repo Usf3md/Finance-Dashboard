@@ -15,13 +15,13 @@ const ButtonsMenu = () => {
       label: "Home",
       link: "/",
       icon: <ImHome />,
-      allowed: runner?.role === "m",
+      allowed: runner?.role === RUNNER_ROLES.CHECKER,
     },
     {
       label: "Dashboard",
       link: "/",
       icon: <MdDashboard />,
-      allowed: runner?.role === "m",
+      allowed: runner?.role === RUNNER_ROLES.CHECKER,
     },
     {
       label: "Purchasing",
@@ -33,7 +33,7 @@ const ButtonsMenu = () => {
       label: "Accounts",
       link: "/accounts/",
       icon: <MdSupervisorAccount />,
-      allowed: runner?.role === "m",
+      allowed: runner?.role === RUNNER_ROLES.CHECKER,
     },
   ];
   return (
