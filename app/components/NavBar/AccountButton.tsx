@@ -33,16 +33,16 @@ const AccountButton = () => {
           <p className="font-bold">Signed in as</p>
           <p>{runner?.email}</p>
         </DropdownItem>
-        <DropdownItem key="profile" className=" gap-2 py-2">
-          <p className="font-bold">
-            Role:{" "}
+        <DropdownItem key="profile" className="py-2">
+          <div className="flex flex-row gap-2">
+            <p className="font-bold">Role:</p>
             <span className="font-normal">
-              {runner?.role == RUNNER_ROLES.MAKER &&
+              {runner?.role === RUNNER_ROLES.MAKER &&
                 titleCase(RUNNER_ROLES.MAKER)}
-              {runner?.role == RUNNER_ROLES.CHECKER &&
+              {runner?.role === RUNNER_ROLES.CHECKER &&
                 titleCase(RUNNER_ROLES.CHECKER)}
             </span>
-          </p>
+          </div>
         </DropdownItem>
         <DropdownItem
           key="logout"
