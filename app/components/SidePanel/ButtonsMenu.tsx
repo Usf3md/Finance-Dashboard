@@ -24,7 +24,7 @@ const ButtonsMenu = () => {
       is_maker: false,
     },
     {
-      label: "Cash Flow",
+      label: "Purchasing",
       link: "/cashflow/",
       icon: <BsCashCoin />,
       is_maker: false,
