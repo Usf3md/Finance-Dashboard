@@ -10,21 +10,20 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import schema, { Transaction } from "@/app/api/cashflow/transaction/schema";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Runner } from "@/app/api/cashflow/runner/schema";
 import { TransactionDetail } from "@/app/api/cashflow/transaction-detail/schema";
 import { getTodaysDate } from "@/services/date";
+import { TransactionDetailService } from "@/services/clients";
+import RunnerContext from "@/app/contexts/RunnerContext";
 
 interface Props {
   openingId: string;
-  currentRunner: Runner;
-  details: TransactionDetail[];
 }
 
-const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
+const AddTransactionForm = ({ openingId }: Props) => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -36,12 +35,19 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
     formState: { errors, isValid },
   } = useForm<Transaction>({ resolver: zodResolver(schema) });
 
+  const [details, setDetails] = useState<TransactionDetail[]>([]);
+  const { runner, setRunner } = useContext(RunnerContext);
+  useEffect(() => {
+    TransactionDetailService.getAll(true).then((res) => {
+      setDetails(res.data);
+    });
+  }, []);
   useEffect(() => {
     register("opening");
     setValue("opening", Number(openingId));
     register("runner");
-    setValue("runner", currentRunner?.id!);
-  }, [openingId, currentRunner?.id!]);
+    setValue("runner", runner?.id!);
+  }, [openingId, runner?.id!]);
 
   const onSubmit = (data: FieldValues) => {
     if (data.transaction_detail)
