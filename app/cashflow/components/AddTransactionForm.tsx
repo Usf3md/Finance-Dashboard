@@ -23,6 +23,14 @@ interface Props {
   details: TransactionDetail[];
 }
 
+const getTodaysDate = () => {
+  var today = new Date();
+  var year = today.getFullYear();
+  var month = String(today.getMonth() + 1).padStart(2, "0");
+  var day = String(today.getDate()).padStart(2, "0");
+  return year + "-" + month + "-" + day;
+};
+
 const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -102,12 +110,13 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
         isInvalid={errors.date && true}
         errorMessage={errors.date && errors.date.message?.toString()}
         radius="sm"
+        defaultValue={getTodaysDate()}
       />
       <Textarea
         {...register("note")}
         type="textarea"
         label="Transaction Notes"
-        placeholder="Enter transaction notes"
+        placeholder="برجاء كتابه المنتجات بالتفصيل"
         isInvalid={errors.note && true}
         errorMessage={errors.note && errors.note.message?.toString()}
         radius="sm"
@@ -117,11 +126,11 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
         defaultValue="false"
         label="Transaction Type"
       >
-        <Radio value="true" color="success">
+        {/* <Radio value="true" color="success">
           <Chip className=" text-xs" variant="bordered" color="success">
             CASH IN
           </Chip>
-        </Radio>
+        </Radio> */}
         <Radio value="false" color="danger">
           <Chip className=" text-xs" variant="bordered" color="danger">
             CASH OUT

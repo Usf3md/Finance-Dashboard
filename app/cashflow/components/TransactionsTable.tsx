@@ -62,7 +62,7 @@ const TransactionsTable = ({
             </TableCell>
 
             <TableCell>{transaction.transaction_detail}</TableCell>
-            <TableCell>${transaction.amount.toString()}</TableCell>
+            <TableCell>£{transaction.amount.toLocaleString("en-US")}</TableCell>
             <TableCell>
               {transaction.transaction_type ? (
                 <FaArrowUpLong className=" text-success" />

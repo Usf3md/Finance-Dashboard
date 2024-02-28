@@ -148,11 +148,11 @@ const Page = ({ searchParams: { openingId } }: Props) => {
             <Card className=" flex-col items-start p-4 rounded-md">
               <CardHeader className="flex-row items-end gap-2">
                 <p className=" text-xl font-bold">Starting Balance:</p>
-                <p className="">${balance.toString()}</p>
+                <p className="">£{balance.toLocaleString("en-US")}</p>
               </CardHeader>
               <CardBody className="flex flex-col flex-wrap gap-4">
                 <p className="text-2xl font-bold" id="balance">
-                  ${(balance - total_loss + total_gain).toString()}
+                  £{(balance - total_loss + total_gain).toLocaleString("en-US")}
                 </p>
                 <div className="flex flex-row">
                   <Chip
@@ -160,14 +160,14 @@ const Page = ({ searchParams: { openingId } }: Props) => {
                     variant="light"
                     color="danger"
                   >
-                    ${total_loss.toString()}
+                    £{total_loss.toLocaleString("en-US")}
                   </Chip>
                   <Chip
                     startContent={<FaArrowUpLong />}
                     variant="light"
                     color="success"
                   >
-                    ${total_gain.toString()}
+                    £{total_gain.toLocaleString("en-US")}
                   </Chip>
                 </div>
               </CardBody>
