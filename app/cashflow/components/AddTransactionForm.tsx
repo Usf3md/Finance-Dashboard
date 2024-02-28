@@ -32,16 +32,15 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
     register,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors, isValid },
   } = useForm<Transaction>({ resolver: zodResolver(schema) });
 
   useEffect(() => {
-    register("opening");
-    setValue("opening", Number(openingId));
     register("runner");
     setValue("runner", currentRunner?.id!);
-  }, [currentRunner]);
+    register("opening");
+    setValue("opening", Number(openingId));
+  }, [currentRunner, openingId]);
 
   const onSubmit = (data: FieldValues) => {
     if (data.transaction_detail)
