@@ -20,9 +20,6 @@ export async function POST(request: NextRequest) {
       Authorization: getAccessCookie(request),
     },
     body: JSON.stringify(body),
-  }).then((response) => {
-    status = response.status;
-    return response.json();
   });
   return NextResponse.json(await opening.json(), { status: status });
 }

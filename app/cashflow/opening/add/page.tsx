@@ -5,6 +5,7 @@ import { useState } from "react";
 import schema, { Opening } from "@/app/api/cashflow/opening/schema";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { getTodaysDate } from "@/services/date";
 
 const Page = () => {
   const [error, setError] = useState("");
@@ -48,6 +49,7 @@ const Page = () => {
             isInvalid={errors.date && true}
             errorMessage={errors.date && errors.date.message?.toString()}
             radius="sm"
+            defaultValue={getTodaysDate()}
           />
           <Input
             {...register("balance")}

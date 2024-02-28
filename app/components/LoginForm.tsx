@@ -30,7 +30,7 @@ const LoginForm = () => {
         <p className=" font-bold text-2xl">Log in</p>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-8 w-full border-1 shadow-sm border-content3 p-11 rounded-md"
+          className="flex flex-col gap-8 w-full border-1 shadow-sm border-content3 p-8 lg:p-11 rounded-md"
         >
           <div className="flex flex-col gap-8">
             <Input
@@ -40,6 +40,7 @@ const LoginForm = () => {
               placeholder="Enter Email"
               isInvalid={errors.email && true}
               errorMessage={errors.email && errors.email.message?.toString()}
+              radius="sm"
             />
             <Input
               {...register("password")}
@@ -50,6 +51,7 @@ const LoginForm = () => {
               errorMessage={
                 errors.password && errors.password.message?.toString()
               }
+              radius="sm"
             />
           </div>
           <div className="flex justify-end">
@@ -58,6 +60,7 @@ const LoginForm = () => {
               className="rouded-md"
               color="primary"
               isDisabled={isSubmitting}
+              radius="sm"
             >
               Log in
             </Button>

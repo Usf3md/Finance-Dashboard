@@ -16,20 +16,13 @@ import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Runner } from "@/app/api/cashflow/runner/schema";
 import { TransactionDetail } from "@/app/api/cashflow/transaction-detail/schema";
+import { getTodaysDate } from "@/services/date";
 
 interface Props {
   openingId: string;
   currentRunner: Runner;
   details: TransactionDetail[];
 }
-
-const getTodaysDate = () => {
-  var today = new Date();
-  var year = today.getFullYear();
-  var month = String(today.getMonth() + 1).padStart(2, "0");
-  var day = String(today.getDate()).padStart(2, "0");
-  return year + "-" + month + "-" + day;
-};
 
 const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
   const [error, setError] = useState("");
@@ -123,7 +116,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
       />
       <RadioGroup
         {...register("transaction_type")}
-        defaultValue="false"
+        defaultValue=""
         label="Transaction Type"
       >
         {/* <Radio value="true" color="success">
@@ -131,7 +124,7 @@ const AddTransactionForm = ({ openingId, currentRunner, details }: Props) => {
             CASH IN
           </Chip>
         </Radio> */}
-        <Radio value="false" color="danger">
+        <Radio value="" color="danger">
           <Chip className=" text-xs" variant="bordered" color="danger">
             CASH OUT
           </Chip>
