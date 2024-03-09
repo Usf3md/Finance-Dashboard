@@ -114,125 +114,128 @@ const Page = ({ searchParams }: Props) => {
               aria-label={member.email}
               title={<AccordionSummary member={member} />}
             >
-              <Divider className="my-4" />
               <div className="flex flex-col gap-6">
                 {member.attendance_set.map((attendance) => (
-                  <div className="grid grid-cols-4 gap-4">
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm">Shift Day</label>
-                      <Chip>
-                        {moment(attendance.current_date)
-                          .tz("Africa/Cairo")
-                          .format("MMMM Do YYYY")}
-                      </Chip>
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm">Leave</label>
-                      {attendance.start_datetime &&
-                        (attendance.end_datetime
-                          ? (function () {
-                              const difference =
-                                parseInt(
-                                  //@ts-ignore
-                                  (attendance.end_datetime -
+                  <>
+                    <Divider className="my-4" />
+                    <div className="grid lg:grid-rows-4 lg:grid-cols-4 gap-4">
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm">Shift Day</label>
+                        <Chip>
+                          {moment(attendance.current_date)
+                            .tz("Africa/Cairo")
+                            .format("MMMM Do YYYY")}
+                        </Chip>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm">Leave</label>
+                        {attendance.start_datetime &&
+                          (attendance.end_datetime
+                            ? (function () {
+                                const difference =
+                                  parseInt(
                                     //@ts-ignore
-                                    attendance.start_datetime) /
-                                    1000
-                                ) - attendance.shift_duration;
-                              if (difference < 0)
-                                return (
-                                  <Chip color="danger" variant="flat">
-                                    {convertSecondsToDuration(-difference)}
-                                  </Chip>
-                                );
-                              else if (difference > 0)
-                                return (
-                                  <Chip color="warning" variant="flat">
-                                    {convertSecondsToDuration(difference)}
-                                  </Chip>
-                                );
-                              return (
-                                <Chip color="success" variant="flat">
-                                  Exact
-                                </Chip>
-                              );
-                            })()
-                          : (function () {
-                              const difference =
-                                parseInt(
-                                  //@ts-ignore
-                                  (clock - attendance.start_datetime) / 1000
-                                ) - attendance.shift_duration;
-                              if (difference < 0)
-                                return (
-                                  <Chip color="danger" variant="flat">
-                                    {convertSecondsToDuration(-difference)}
-                                  </Chip>
-                                );
-                              else if (difference > 0)
-                                return (
-                                  <Chip color="warning" variant="flat">
-                                    {convertSecondsToDuration(difference)}
-                                  </Chip>
-                                );
-                              return (
-                                <Chip color="success" variant="flat">
-                                  Exact
-                                </Chip>
-                              );
-                            })())}
-                    </div>
-                    <div className="flex flex-col gap-1">
-                      <label className="text-sm">Time Spent</label>
-                      <Chip variant="flat" color="secondary">
-                        <div className="flex gap-2">
-                          <span>
-                            {attendance.start_datetime &&
-                              (attendance.end_datetime
-                                ? convertSecondsToDuration(
-                                    parseInt(
+                                    (attendance.end_datetime -
                                       //@ts-ignore
-                                      (attendance.end_datetime -
+                                      attendance.start_datetime) /
+                                      1000
+                                  ) - attendance.shift_duration;
+                                if (difference < 0)
+                                  return (
+                                    <Chip color="danger" variant="flat">
+                                      {convertSecondsToDuration(-difference)}
+                                    </Chip>
+                                  );
+                                else if (difference > 0)
+                                  return (
+                                    <Chip color="warning" variant="flat">
+                                      {convertSecondsToDuration(difference)}
+                                    </Chip>
+                                  );
+                                return (
+                                  <Chip color="success" variant="flat">
+                                    Exact
+                                  </Chip>
+                                );
+                              })()
+                            : (function () {
+                                const difference =
+                                  parseInt(
+                                    //@ts-ignore
+                                    (clock - attendance.start_datetime) / 1000
+                                  ) - attendance.shift_duration;
+                                if (difference < 0)
+                                  return (
+                                    <Chip color="danger" variant="flat">
+                                      {convertSecondsToDuration(-difference)}
+                                    </Chip>
+                                  );
+                                else if (difference > 0)
+                                  return (
+                                    <Chip color="warning" variant="flat">
+                                      {convertSecondsToDuration(difference)}
+                                    </Chip>
+                                  );
+                                return (
+                                  <Chip color="success" variant="flat">
+                                    Exact
+                                  </Chip>
+                                );
+                              })())}
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <label className="text-sm">Time Spent</label>
+                        <Chip variant="flat" color="secondary">
+                          <div className="flex gap-2">
+                            <span>
+                              {attendance.start_datetime &&
+                                (attendance.end_datetime
+                                  ? convertSecondsToDuration(
+                                      parseInt(
                                         //@ts-ignore
-                                        attendance.start_datetime) /
-                                        1000
+                                        (attendance.end_datetime -
+                                          //@ts-ignore
+                                          attendance.start_datetime) /
+                                          1000
+                                      )
                                     )
-                                  )
-                                : convertSecondsToDuration(
-                                    parseInt(
-                                      //@ts-ignore
-                                      (clock - attendance.start_datetime) / 1000
-                                    )
-                                  ))}
+                                  : convertSecondsToDuration(
+                                      parseInt(
+                                        //@ts-ignore
+                                        (clock - attendance.start_datetime) /
+                                          1000
+                                      )
+                                    ))}
+                            </span>
+                            /
+                            <span>
+                              {convertSecondsToDuration(
+                                attendance.shift_duration
+                              )}
+                            </span>
+                          </div>
+                        </Chip>
+                      </div>
+                      <div>
+                        <p className="flex flex-col gap-2">
+                          <span className="text-success font-bold">
+                            {attendance.start_datetime
+                              ? moment(attendance.start_datetime)
+                                  .tz("Africa/Cairo")
+                                  .format("MMMM Do YYYY, h:mm:ss a")
+                              : "UNSET"}
                           </span>
-                          /
-                          <span>
-                            {convertSecondsToDuration(
-                              attendance.shift_duration
-                            )}
+                          <span className="text-danger font-bold">
+                            {attendance.end_datetime
+                              ? moment(attendance.end_datetime)
+                                  .tz("Africa/Cairo")
+                                  .format("MMMM Do YYYY, h:mm:ss a")
+                              : "UNSET"}
                           </span>
-                        </div>
-                      </Chip>
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="flex flex-col gap-2">
-                        <span className="text-success font-bold">
-                          {attendance.start_datetime
-                            ? moment(attendance.start_datetime)
-                                .tz("Africa/Cairo")
-                                .format("MMMM Do YYYY, h:mm:ss a")
-                            : "UNSET"}
-                        </span>
-                        <span className="text-danger font-bold">
-                          {attendance.end_datetime
-                            ? moment(attendance.end_datetime)
-                                .tz("Africa/Cairo")
-                                .format("MMMM Do YYYY, h:mm:ss a")
-                            : "UNSET"}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
+                  </>
                 ))}
               </div>
             </AccordionItem>
