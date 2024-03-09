@@ -10,10 +10,13 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import Authenticator from "@/services/auth/auth";
 import { RUNNER_ROLES, Runner } from "@/app/api/cashflow/runner/schema";
-import RunnerContext from "@/app/contexts/RunnerContext";
 import { titleCase } from "@/services/utils";
+import UserContext from "@/app/contexts/UserContext";
+import { User as u } from "@/app/api/auth/user/schema";
+import RunnerContext from "@/app/contexts/RunnerContext";
 
 const AccountButton = () => {
+  const { user, setUser } = useContext(UserContext);
   const { runner, setRunner } = useContext(RunnerContext);
   return (
     <Dropdown placement="bottom-start">
@@ -21,8 +24,8 @@ const AccountButton = () => {
         <User
           as="button"
           className="transition-transform"
-          description={runner?.email}
-          name={runner?.full_name}
+          description={user?.email}
+          name={user?.full_name}
           avatarProps={{
             fallback: <AvatarIcon />,
           }}
@@ -31,16 +34,13 @@ const AccountButton = () => {
       <DropdownMenu aria-label="User Actions" variant="flat">
         <DropdownItem key="profile" className=" gap-2 py-2">
           <p className="font-bold">Signed in as</p>
-          <p>{runner?.email}</p>
+          <p>{user?.email}</p>
         </DropdownItem>
         <DropdownItem key="profile" className="py-2">
           <div className="flex flex-row gap-2">
-            <p className="font-bold">Role:</p>
+            <p className="font-bold">Is Control:</p>
             <span className="font-normal">
-              {runner?.role === RUNNER_ROLES.MAKER &&
-                titleCase(RUNNER_ROLES.MAKER)}
-              {runner?.role === RUNNER_ROLES.CHECKER &&
-                titleCase(RUNNER_ROLES.CHECKER)}
+              {user?.is_control ? "True" : "False"}
             </span>
           </div>
         </DropdownItem>
@@ -50,6 +50,7 @@ const AccountButton = () => {
           className="py-2"
           onClick={() => {
             Authenticator.logout().then(() => location.reload());
+            setUser({} as u);
             setRunner({} as Runner);
           }}
         >

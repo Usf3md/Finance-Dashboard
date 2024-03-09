@@ -7,8 +7,11 @@ import { MdDashboard, MdSupervisorAccount } from "react-icons/md";
 import RunnerContext from "@/app/contexts/RunnerContext";
 import { useContext } from "react";
 import { RUNNER_ROLES } from "@/app/api/cashflow/runner/schema";
+import UserContext from "@/app/contexts/UserContext";
+import { FaDoorOpen } from "react-icons/fa6";
 
 const ButtonsMenu = () => {
+  const { user, setUser } = useContext(UserContext);
   const { runner, setRunner } = useContext(RunnerContext);
   const tools = [
     {
@@ -28,6 +31,12 @@ const ButtonsMenu = () => {
       link: "/cashflow/",
       icon: <BsCashCoin />,
       allowed: runner?.role,
+    },
+    {
+      label: "Attendance",
+      link: "/attendance/",
+      icon: <FaDoorOpen />,
+      allowed: user?.is_control,
     },
     {
       label: "Accounts",
