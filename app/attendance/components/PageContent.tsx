@@ -27,6 +27,7 @@ const PageContent = ({ min_date, max_date }: Props) => {
   const [clock, setClock] = useState<Date>(new Date());
   const [start, setStart] = useState(min_date);
   const [end, setEnd] = useState(max_date);
+  const [keyword, setKeyword] = useState("");
   const router = useRouter();
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,17 +64,36 @@ const PageContent = ({ min_date, max_date }: Props) => {
               .sort((a, b) => parseInt(b.current_date - a.current_date) / 1000),
           };
         });
+        convertedData.sort((a, b) => {
+          if (a.full_name < b.full_name) return -1;
+          if (a.full_name > b.full_name) return 1;
+          return 0;
+        });
         setMembers(convertedData);
       })
       .finally(() => {
         setIsLoading(false);
       });
   }, [min_date, max_date]);
+
+  const filteredMembers = members.filter((member) =>
+    member.full_name.toLowerCase().includes(keyword.toLowerCase())
+  );
+
   return (
     <article className="flex flex-col gap-8">
       <div className="flex gap-4 justify-between">
         <label className=" font-bold text-2xl">Attendances</label>
-        <div className="flex flex-col lg:flex-row gap-4 w-1/2 lg:items-end">
+        <div className="flex flex-col lg:flex-row gap-4 w-full lg:items-end">
+          <Input
+            type="text"
+            label="Search Member"
+            placeholder="Enter Keywords"
+            radius="sm"
+            defaultValue={keyword}
+            value={keyword}
+            onValueChange={setKeyword}
+          />
           <Input
             type="date"
             label="Start Date"
@@ -107,7 +127,7 @@ const PageContent = ({ min_date, max_date }: Props) => {
         <FullPageSpinner />
       ) : (
         <Accordion variant="splitted" className="w-full">
-          {members.map((member) => (
+          {filteredMembers.map((member) => (
             <AccordionItem
               key={member.id}
               aria-label={member.email}
