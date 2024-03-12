@@ -9,7 +9,7 @@ interface Props {
 
 const AccordionSummary = ({ member }: Props) => {
   return (
-    <div className="grid grid-cols-4 gap-4 items-center">
+    <div className="grid grid-cols-4 gap-4 items justify-items-start items-center px-4">
       <div className="flex flex-col gap-1">
         <User
           as="button"
