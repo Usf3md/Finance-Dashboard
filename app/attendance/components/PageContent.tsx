@@ -15,11 +15,34 @@ import AccordionSummary from "./AccordionSummary";
 import FullPageSpinner from "@/app/components/FullPageSpinner";
 import moment from "moment";
 import "moment-timezone";
+import { Attendance } from "@/app/api/attendance/schema";
+import { difference } from "next/dist/build/utils";
 
 interface Props {
   min_date: string;
   max_date: string;
 }
+
+export const calculateDifference = (attendance: Attendance, clock: Date) => {
+  let difference;
+  if (attendance.end_datetime) {
+    difference =
+      parseInt(
+        //@ts-ignore
+        (attendance.end_datetime -
+          //@ts-ignore
+          attendance.start_datetime) /
+          1000
+      ) - attendance.shift_duration;
+  } else {
+    difference =
+      parseInt(
+        //@ts-ignore
+        (clock - attendance.start_datetime) / 1000
+      ) - attendance.shift_duration;
+  }
+  return difference;
+};
 
 const PageContent = ({ min_date, max_date }: Props) => {
   const [members, setMembers] = useState<Member[]>([]);
@@ -79,7 +102,6 @@ const PageContent = ({ min_date, max_date }: Props) => {
   const filteredMembers = members.filter((member) =>
     member.full_name.toLowerCase().includes(keyword.toLowerCase())
   );
-
   return (
     <article className="flex flex-col gap-8">
       <div className="flex gap-4 justify-between">
@@ -148,59 +170,29 @@ const PageContent = ({ min_date, max_date }: Props) => {
                       </div>
                       <div className="flex flex-col gap-1">
                         <label className="text-sm">Leave</label>
-                        {attendance.start_datetime &&
-                          (attendance.end_datetime
-                            ? (function () {
-                                const difference =
-                                  parseInt(
-                                    //@ts-ignore
-                                    (attendance.end_datetime -
-                                      //@ts-ignore
-                                      attendance.start_datetime) /
-                                      1000
-                                  ) - attendance.shift_duration;
-                                if (difference < 0)
-                                  return (
-                                    <Chip color="danger" variant="flat">
-                                      {convertSecondsToDuration(-difference)}
-                                    </Chip>
-                                  );
-                                else if (difference > 0)
-                                  return (
-                                    <Chip color="warning" variant="flat">
-                                      {convertSecondsToDuration(difference)}
-                                    </Chip>
-                                  );
-                                return (
-                                  <Chip color="success" variant="flat">
-                                    Exact
-                                  </Chip>
-                                );
-                              })()
-                            : (function () {
-                                const difference =
-                                  parseInt(
-                                    //@ts-ignore
-                                    (clock - attendance.start_datetime) / 1000
-                                  ) - attendance.shift_duration;
-                                if (difference < 0)
-                                  return (
-                                    <Chip color="danger" variant="flat">
-                                      {convertSecondsToDuration(-difference)}
-                                    </Chip>
-                                  );
-                                else if (difference > 0)
-                                  return (
-                                    <Chip color="warning" variant="flat">
-                                      {convertSecondsToDuration(difference)}
-                                    </Chip>
-                                  );
-                                return (
-                                  <Chip color="success" variant="flat">
-                                    Exact
-                                  </Chip>
-                                );
-                              })())}
+                        {(function () {
+                          const difference = calculateDifference(
+                            attendance,
+                            clock
+                          );
+                          if (difference < 0)
+                            return (
+                              <Chip color="danger" variant="flat">
+                                {convertSecondsToDuration(-difference)}
+                              </Chip>
+                            );
+                          else if (difference > 0)
+                            return (
+                              <Chip color="warning" variant="flat">
+                                {convertSecondsToDuration(difference)}
+                              </Chip>
+                            );
+                          return (
+                            <Chip color="success" variant="flat">
+                              Exact
+                            </Chip>
+                          );
+                        })()}
                       </div>
                       <div className="flex flex-col gap-1">
                         <label className="text-sm">Time Spent</label>
