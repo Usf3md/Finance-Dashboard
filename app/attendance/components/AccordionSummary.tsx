@@ -13,7 +13,7 @@ const static_date = new Date();
 
 const AccordionSummary = ({ member }: Props) => {
   return (
-    <div className="grid grid-cols-5 gap-4 items justify-items-start items-center px-4">
+    <div className="grid grid-rows-5 lg:grid-rows-1 lg:grid-cols-5 gap-4 items justify-items-start items-center px-4">
       <div className="flex flex-col gap-1">
         <User
           as="button"
