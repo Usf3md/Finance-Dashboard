@@ -3,7 +3,6 @@ import { Attendance } from "@/app/api/attendance/schema";
 import { convertSecondsToDuration } from "@/services/utils";
 import { AvatarIcon, Chip, User } from "@nextui-org/react";
 import React from "react";
-import { calculateDifference } from "./PageContent";
 
 interface Props {
   member: Member;
@@ -29,38 +28,28 @@ const AccordionSummary = ({ member }: Props) => {
         <label className="text-sm">Days</label>
         <Chip variant="flat" color="success">
           <div className="flex gap-2">
-            <span>{member.attended_days}</span>/
+            <span>{member.attended_work_days}</span>/
             <span>{member.total_work_days}</span>
           </div>
         </Chip>
       </div>
       <div className="flex flex-col gap-1">
         {(function () {
-          const difference = member.attendance_set
-            .map((attendance) => {
-              let d = calculateDifference(attendance, static_date);
-              if (d > attendance.shift_duration)
-                return -(attendance.shift_duration / 2);
-              if (-d > attendance.shift_duration)
-                return -(attendance.shift_duration / 2);
-              return d;
-            })
-            .reduce((prev, current) => prev + current, 0);
-          if (difference < 0)
+          if (member.attended_overtime < 0)
             return (
               <>
                 <label className="text-sm">Early Leave</label>
                 <Chip color="danger" variant="flat">
-                  {convertSecondsToDuration(-difference)}
+                  {convertSecondsToDuration(-member.attended_overtime)}
                 </Chip>
               </>
             );
-          else if (difference > 0)
+          else if (member.attended_overtime > 0)
             return (
               <>
                 <label className="text-sm">Overtime</label>
                 <Chip color="warning" variant="flat">
-                  {convertSecondsToDuration(difference)}
+                  {convertSecondsToDuration(member.attended_overtime)}
                 </Chip>
               </>
             );
@@ -68,7 +57,7 @@ const AccordionSummary = ({ member }: Props) => {
             <>
               <label className="text-sm">Exact Leave</label>
               <Chip color="success" variant="flat">
-                {convertSecondsToDuration(difference)}
+                {convertSecondsToDuration(member.attended_overtime)}
               </Chip>
             </>
           );
@@ -78,8 +67,8 @@ const AccordionSummary = ({ member }: Props) => {
         <label className="text-sm">Time</label>
         <Chip variant="flat" color="secondary">
           <div className="flex gap-2">
-            <span>{convertSecondsToDuration(member.attended_time)}</span>/
-            <span>{convertSecondsToDuration(member.total_work_time)}</span>
+            <span>{convertSecondsToDuration(member.attended_work_time!)}</span>/
+            <span>{convertSecondsToDuration(member.total_work_time!)}</span>
           </div>
         </Chip>
       </div>

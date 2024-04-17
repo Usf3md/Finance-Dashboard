@@ -33,9 +33,12 @@ export const MemberSchema = z.object({
   shift_duration: z.number(),
   attendance_set: z.array(attendanceSchema),
   total_work_time: z.number(),
-  attended_time: z.number(),
-  attended_days: z.number(),
+  attended_work_time: z.number(),
+  attended_dayoff_time: z.number(),
   total_work_days: z.number(),
+  attended_work_days: z.number(),
+  attended_dayoff_days: z.number(),
+  attended_overtime: z.number(),
 });
 
 export type Member = z.infer<typeof MemberSchema>;
