@@ -12,7 +12,7 @@ const static_date = new Date();
 
 const AccordionSummary = ({ member }: Props) => {
   return (
-    <div className="grid grid-rows-5 lg:grid-rows-1 lg:grid-cols-5 gap-4 items justify-items-start items-center px-4">
+    <div className="grid grid-rows-5 lg:grid-rows-2 lg:grid-cols-5 gap-4 items justify-items-start items-center px-4">
       <div className="flex flex-col gap-1">
         <User
           as="button"
@@ -76,6 +76,23 @@ const AccordionSummary = ({ member }: Props) => {
         <label className="text-sm">Job</label>
         <Chip color="primary" variant="flat">
           {member.job}
+        </Chip>
+      </div>
+      <div></div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm">Attended Days off</label>
+        <Chip variant="flat" color="success">
+          <div className="flex gap-2">
+            <span>{member.attended_dayoff_days}</span>
+          </div>
+        </Chip>
+      </div>
+      <div className="flex flex-col gap-1">
+        <label className="text-sm">Attended Days off Time</label>
+        <Chip variant="flat" color="warning">
+          <div className="flex gap-2">
+            <span>{convertSecondsToDuration(member.attended_dayoff_time)}</span>
+          </div>
         </Chip>
       </div>
     </div>
